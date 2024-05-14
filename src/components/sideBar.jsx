@@ -3,6 +3,13 @@ import { Link } from "react-router-dom"
 import { FiMenu } from "react-icons/fi";
 import { useState } from "react";
 import { FaCalendar } from "react-icons/fa";
+import { IoMdHome } from "react-icons/io";
+import { BsReceipt } from "react-icons/bs";
+import { MdHowToVote } from "react-icons/md";
+import { MdOutlineMarkEmailUnread } from "react-icons/md";
+import { IoPeople } from "react-icons/io5";
+import { GiThreeFriends } from "react-icons/gi";
+import { SiGooglemeet } from "react-icons/si";
 
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -33,125 +40,123 @@ export const SideBar = () => {
     const [selected, setSelected] = useState("Dashboard");
     return (
         <div style={{
-
-        }} className="">
+            "& .pro-menu-item.active": {
+                color: "#6870fa !important",
+            },
+        }} className="text-white">
             <Sidebar
-                backgroundColor="#3e4396"
+                backgroundColor="#1f2a40"
                 collapsed={isCollapsed}
+                style={{
+                    height: "100%",
+                }}
+
             >
                 <Menu>
-                    <MenuItem
-                        onClick={() => { setIsCollapsed(!isCollapsed) }}
-                        icon={isCollapsed ? <FiMenu /> : undefined}
-                    >
+                    {/* <div 
+                    style={{
+                        position:""
+                    }}
+                    className=""> */}
+                        <MenuItem
+                            onClick={() => { setIsCollapsed(!isCollapsed) }}
+                            icon={isCollapsed ? <FiMenu /> : undefined}
+                        >
+                            {
+                                !isCollapsed && (
+                                    <div className="flex justify-between ml-[15px] items-center text-white  ">
+                                        <p>ADMIN</p>
+                                        <FiMenu
+                                            onClick={() => {
+                                                setIsCollapsed(!isCollapsed)
+                                            }}
+                                        />
+                                    </div>
+                                )
+                            }
+                        </MenuItem>
                         {
                             !isCollapsed && (
-                                <div className="flex justify-between ml-[15px] items-center text-white  ">
-                                    <p>ADMIN</p>
-                                    <FiMenu
-                                        onClick={() => {
-                                            setIsCollapsed(!isCollapsed)
-                                        }}
+                                <div className="mb-5 flex justify-center items-center">
+                                    <img
+                                        className="w-24 h-24 cursor-pointer rounded-full"
+                                        alt="profile-user"
+                                        src={`/images/moha.svg`}
                                     />
                                 </div>
                             )
                         }
-                    </MenuItem>
-                    {
-                        !isCollapsed && (
-                            <div className="mb-5 flex justify-center items-center">
-                                <img
-                                    className="w-24 h-24 cursor-pointer rounded-full"
-                                    alt="profile-user"
-                                    src={`/images/moha.svg`}
-                                />
-                            </div>
-                        )
-                    }
-                    <Item
-                        title="Chapters"
-                        to="/chapters"
-                        icon={<FaCalendar />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="Payments"
-                        to="/payments"
-                        icon={<FaCalendar />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="Email"
-                        to="/email"
-                        icon={<FaCalendar />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="Video Conferencing"
-                        to="/calls"
-                        icon={<FaCalendar />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="Chapters"
-                        to="/chapters"
-                        icon={<FaCalendar />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="Payments"
-                        to="/payments"
-                        icon={<FaCalendar />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="Email"
-                        to="/email"
-                        icon={<FaCalendar />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="Video Conferencing"
-                        to="/calls"
-                        icon={<FaCalendar />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="Chapters"
-                        to="/chapters"
-                        icon={<FaCalendar />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="Payments"
-                        to="/payments"
-                        icon={<FaCalendar />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="Email"
-                        to="/email"
-                        icon={<FaCalendar />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="Video Conferencing"
-                        to="/calls"
-                        icon={<FaCalendar />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
+                        {
+                            !isCollapsed && (
+                                <div className="mb-5 flex justify-center items-center">
+                                    
+                                </div>
+                            )
+                        }
+                    {/* </div> */}
+                    <div
+                        style={{
+                        }}
+                    >
+                        <Item
+                            title="Dashboard"
+                            to="/chapters"
+                            icon={<IoMdHome />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
+                            title="Payments"
+                            to="/payments"
+                            icon={<BsReceipt />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
+                            title="Email"
+                            to="/email"
+                            icon={<MdOutlineMarkEmailUnread />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
+                            title="Calendar"
+                            to="/chapters"
+                            icon={<FaCalendar />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
+                            title="Election"
+                            to="/payments"
+                            icon={<MdHowToVote />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
+                            title="Class"
+                            to="/email"
+                            icon={<GiThreeFriends />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
+                            title="Chapters"
+                            to="/chapters"
+                            icon={<IoPeople />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                         <Item
+                            title="Meetings"
+                            to="/chapters"
+                            icon={<SiGooglemeet />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                       
+
+                    </div>
 
                 </Menu>
             </Sidebar>
