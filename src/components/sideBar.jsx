@@ -10,7 +10,7 @@ import { MdOutlineMarkEmailUnread } from "react-icons/md";
 import { IoPeople } from "react-icons/io5";
 import { GiThreeFriends } from "react-icons/gi";
 import { SiGooglemeet } from "react-icons/si";
-
+import { GrGallery } from "react-icons/gr";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
 
@@ -22,11 +22,12 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
             }}
             onClick={() => setSelected(title)}
             icon={icon}
+            component={<Link to={to} />}
         >
             <div className="">
                 {title}
             </div>
-            <Link to={to} />
+            
         </MenuItem>
     );
 };
@@ -45,6 +46,7 @@ export const SideBar = () => {
             },
         }} className="text-white">
             <Sidebar
+
                 backgroundColor="#1f2a40"
                 collapsed={isCollapsed}
                 style={{
@@ -58,41 +60,41 @@ export const SideBar = () => {
                         position:""
                     }}
                     className=""> */}
-                        <MenuItem
-                            onClick={() => { setIsCollapsed(!isCollapsed) }}
-                            icon={isCollapsed ? <FiMenu /> : undefined}
-                        >
-                            {
-                                !isCollapsed && (
-                                    <div className="flex justify-between ml-[15px] items-center text-white  ">
-                                        <p>ADMIN</p>
-                                        <FiMenu
-                                            onClick={() => {
-                                                setIsCollapsed(!isCollapsed)
-                                            }}
-                                        />
-                                    </div>
-                                )
-                            }
-                        </MenuItem>
+                    <MenuItem
+                        onClick={() => { setIsCollapsed(!isCollapsed) }}
+                        icon={isCollapsed ? <FiMenu /> : undefined}
+                    >
                         {
                             !isCollapsed && (
-                                <div className="mb-5 flex justify-center items-center">
-                                    <img
-                                        className="w-24 h-24 cursor-pointer rounded-full"
-                                        alt="profile-user"
-                                        src={`/images/moha.svg`}
+                                <div className="flex justify-between ml-[15px] items-center text-white  ">
+                                    <p>ADMIN</p>
+                                    <FiMenu
+                                        onClick={() => {
+                                            setIsCollapsed(!isCollapsed)
+                                        }}
                                     />
                                 </div>
                             )
                         }
-                        {
-                            !isCollapsed && (
-                                <div className="mb-5 flex justify-center items-center">
-                                    
-                                </div>
-                            )
-                        }
+                    </MenuItem>
+                    {
+                        !isCollapsed && (
+                            <div className="mb-5 flex justify-center items-center">
+                                <img
+                                    className="w-24 h-24 cursor-pointer rounded-full"
+                                    alt="profile-user"
+                                    src={`/images/moha.svg`}
+                                />
+                            </div>
+                        )
+                    }
+                    {
+                        !isCollapsed && (
+                            <div className="mb-5 flex justify-center items-center">
+
+                            </div>
+                        )
+                    }
                     {/* </div> */}
                     <div
                         style={{
@@ -100,7 +102,7 @@ export const SideBar = () => {
                     >
                         <Item
                             title="Dashboard"
-                            to="/chapters"
+                            to="/dashboard"
                             icon={<IoMdHome />}
                             selected={selected}
                             setSelected={setSelected}
@@ -121,21 +123,21 @@ export const SideBar = () => {
                         />
                         <Item
                             title="Calendar"
-                            to="/chapters"
+                            to="/calendar"
                             icon={<FaCalendar />}
                             selected={selected}
                             setSelected={setSelected}
                         />
                         <Item
                             title="Election"
-                            to="/payments"
+                            to="/election"
                             icon={<MdHowToVote />}
                             selected={selected}
                             setSelected={setSelected}
                         />
                         <Item
                             title="Class"
-                            to="/email"
+                            to="/class"
                             icon={<GiThreeFriends />}
                             selected={selected}
                             setSelected={setSelected}
@@ -147,15 +149,20 @@ export const SideBar = () => {
                             selected={selected}
                             setSelected={setSelected}
                         />
-                         <Item
+                        <Item
                             title="Meetings"
-                            to="/chapters"
+                            to="/meetings"
                             icon={<SiGooglemeet />}
                             selected={selected}
                             setSelected={setSelected}
                         />
-                       
-
+                           <Item
+                            title="Gallery"
+                            to="/gallery"
+                            icon={<GrGallery />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
                     </div>
 
                 </Menu>

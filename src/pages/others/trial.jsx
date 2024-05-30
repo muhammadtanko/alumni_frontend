@@ -59,6 +59,97 @@ export default function Onboarding() {
     );
 }
 
+
+
+
+// const PersonalInfo = ({ nextStep }) => {
+//     const validationSchema = Yup.object({
+//         phone: Yup.string().required('Phone number is required'),
+//         city: Yup.string().required('City is required'),
+//         photo: Yup.mixed().required('Photo is required'),
+//         sports: Yup.array().of(Yup.string().required('At least one sport is required')),
+//         socialLinks: Yup.array().of(Yup.string().required('At least one social link is required')),
+//         country: Yup.string().required('Country is required'),
+//     });
+
+//     return (
+//         <Formik
+//             initialValues={{ phone: '', city: '', photo: '', sports: [''], socialLinks: [''], country: 'Nigeria' }}
+//             validationSchema={validationSchema}
+//             onSubmit={(values) => {
+//                 console.log(values);
+//                 nextStep();
+//             }}
+//         >
+//             <Form className="grid gap-4 gap-y-2 text-sm grid-cols-2 md:grid-cols-5">
+//                 <div className="md:col-span-5">
+//                     <label htmlFor="phone">Phone</label>
+//                     <Field name="phone" type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
+//                     <ErrorMessage name="phone" component="div" className="text-red-500 text-xs" />
+//                 </div>
+//                 <div className="md:col-span-5">
+//                     <label htmlFor="city">City</label>
+//                     <Field name="city" type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
+//                     <ErrorMessage name="city" component="div" className="text-red-500 text-xs" />
+//                 </div>
+//                 <div className="md:col-span-5">
+//                     <label htmlFor="photo">Photo</label>
+//                     <Field name="photo" type="" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
+//                     <ErrorMessage name="photo" component="div" className="text-red-500 text-xs" />
+//                 </div>
+//                 <div className="md:col-span-5">
+//                     <label htmlFor="sports">Sports</label>
+//                     <FieldArray name="sports">
+//                         {({ push, remove, form }) => (
+//                             <div>
+//                                 {form.values.sports.map((_, index) => (
+//                                     <div key={index} className="flex items-center mb-2">
+//                                         <Field name={`sports.${index}`} type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
+//                                         <button type="button" onClick={() => remove(index)} className="ml-2 text-red-500">Remove</button>
+//                                     </div>
+//                                 ))}
+//                                 <button type="button" onClick={() => push('')} className="mt-2 text-blue-500">Add Sport</button>
+//                             </div>
+//                         )}
+//                     </FieldArray>
+//                     <ErrorMessage name="sports" component="div" className="text-red-500 text-xs" />
+//                 </div>
+//                 <div className="md:col-span-5">
+//                     <label htmlFor="socialLinks">Social Links</label>
+//                     <FieldArray name="socialLinks">
+//                         {({ push, remove, form }) => (
+//                             <div>
+//                                 {form.values.socialLinks.map((_, index) => (
+//                                     <div key={index} className="flex items-center mb-2">
+//                                         <Field name={`socialLinks.${index}`} type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
+//                                         <button type="button" onClick={() => remove(index)} className="ml-2 text-red-500">Remove</button>
+//                                     </div>
+//                                 ))}
+//                                 <button type="button" onClick={() => push('')} className="mt-2 text-blue-500">Add Link</button>
+//                             </div>
+//                         )}
+//                     </FieldArray>
+//                     <ErrorMessage name="socialLinks" component="div" className="text-red-500 text-xs" />
+//                 </div>
+//                 <div className="md:col-span-5">
+//                     <label htmlFor="country">Country</label>
+//                     <Field as="select" name="country" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
+//                         <option value="Nigeria">Nigeria</option>
+//                         <option value="Canada">Canada</option>
+//                         <option value="United Kingdom">United Kingdom</option>
+//                     </Field>
+//                     <ErrorMessage name="country" component="div" className="text-red-500 text-xs" />
+//                 </div>
+//                 <div className="md:col-span-5 flex justify-right">
+//                     {/* <button type="button" onClick={prevStep} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Back</button> */}
+//                     <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Next</button>
+//                 </div>
+//             </Form>
+//         </Formik>
+//     );
+// };
+
+// val, single in row
 const PersonalInfo = ({ nextStep, prevStep }) => {
     const validationSchema = Yup.object({
         phone: Yup.string().required('Phone number is required'),
@@ -66,12 +157,12 @@ const PersonalInfo = ({ nextStep, prevStep }) => {
         photo: Yup.mixed().required('Photo is required'),
         sports: Yup.array().of(Yup.string().required('At least one sport is required')),
         socialLinks: Yup.array().of(Yup.string().required('At least one social link is required')),
-        country: Yup.string().oneOf(['Nigeria', 'Canada/USA', 'UK']).required('Country of residence is required'),
+        country: Yup.string().required('Country is required'),
     });
 
     return (
         <Formik
-            initialValues={{ phone: '', city: '', photo: null, sports: [''], socialLinks: [''], country: '' }}
+            initialValues={{ phone: '', city: '', photo: null, sports: [''], socialLinks: [''], country: 'Nigeria' }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
                 console.log(values);
@@ -79,7 +170,7 @@ const PersonalInfo = ({ nextStep, prevStep }) => {
             }}
         >
             {({ setFieldValue }) => (
-                <Form className="grid gap-3 gap-y-1 text-sm grid-cols-1 md:grid-cols-2">
+                <Form className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-2">
                     <div className="md:col-span-1">
                         <label htmlFor="phone">Phone</label>
                         <Field name="phone" type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
@@ -101,8 +192,8 @@ const PersonalInfo = ({ nextStep, prevStep }) => {
                         <label htmlFor="country">Country</label>
                         <Field as="select" name="country" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
                             <option value="Nigeria">Nigeria</option>
-                            <option value="Canada/USA">Canada/USA</option>
-                            <option value="UK">United Kingdom</option>
+                            <option value="Canada">Canada</option>
+                            <option value="United Kingdom">United Kingdom</option>
                         </Field>
                         <ErrorMessage name="country" component="div" className="text-red-500 text-xs" />
                     </div>
@@ -148,14 +239,107 @@ const PersonalInfo = ({ nextStep, prevStep }) => {
                     </div>
                    
                     <div className="md:col-span-2 flex justify-between">
-                       
-                        <button type="submit" className="bg-bgDArk text-white font-bold py-2 px-4 rounded">Next</button>
+                        <button type="button" onClick={prevStep} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Back</button>
+                        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Next</button>
                     </div>
                 </Form>
             )}
         </Formik>
     );
 };
+
+
+// no val many in row
+// const PersonalInfo = ({ nextStep }) => {
+//     const validationSchema = Yup.object({
+//         phone: Yup.string().required('Phone number is required'),
+//         country: Yup.string().oneOf(['Nigeria', 'Canada', 'United Kingdom'], 'Invalid Country').required('Country of residence is required'),
+//         city: Yup.string().required('City/State of residence is required'),
+//         photo: Yup.mixed().required('Photo is required'),
+//         sports: Yup.array().of(Yup.string().required('Sport is required')),
+//         socialLinks: Yup.array().of(Yup.string().url('Invalid URL').required('Social media link is required')),
+//     });
+
+//     return (
+//         <Formik
+//             initialValues={{ phone: '', country: '', city: '', photo: null, sports: [''], socialLinks: [''] }}
+//             validationSchema={validationSchema}
+//             onSubmit={(values) => {
+//                 console.log("here oooo",values);
+//                 nextStep();
+//             }}
+//         >
+//             {({ setFieldValue }) => (
+//                 <Form className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-2">
+//                     <div>
+//                         <label htmlFor="phone">Phone Number</label>
+//                         <Field name="phone" type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
+//                         <ErrorMessage name="phone" component="div" className="text-red-500 text-xs" />
+//                     </div>
+//                     <div>
+//                         <label htmlFor="country">Country of Residence</label>
+//                         <Field name="country" as="select" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
+//                             <option value="">Select Country</option>
+//                             <option value="Nigeria">Nigeria</option>
+//                             <option value="Canada">Canada</option>
+//                             <option value="United Kingdom">United Kingdom</option>
+//                         </Field>
+//                         <ErrorMessage name="country" component="div" className="text-red-500 text-xs" />
+//                     </div>
+//                     <div>
+//                         <label htmlFor="city">State or City of Residence</label>
+//                         <Field name="city" type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
+//                         <ErrorMessage name="city" component="div" className="text-red-500 text-xs" />
+//                     </div>
+//                     <div>
+//                         <label htmlFor="photo">Photo</label>
+//                         <input name="photo" type="file" onChange={(event) => setFieldValue('photo', event.currentTarget.files[0])} className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
+//                         <ErrorMessage name="photo" component="div" className="text-red-500 text-xs" />
+//                     </div>
+//                     <div>
+//                         <label>Sports</label>
+//                         <FieldArray name="sports">
+//                             {({ push, remove, form }) => (
+//                                 <div>
+//                                     {form.values.sports.map((_, index) => (
+//                                         <div key={index} className="flex items-center mb-2">
+//                                             <Field name={`sports.${index}`} type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
+//                                             <button type="button" onClick={() => remove(index)} className="ml-2 text-red-500">Remove</button>
+//                                         </div>
+//                                     ))}
+//                                     <button type="button" onClick={() => push('')} className="mt-2 text-blue-500">Add Sport</button>
+//                                 </div>
+//                             )}
+//                         </FieldArray>
+//                     </div>
+//                     <div>
+//                         <label>Links to Social Media Accounts</label>
+//                         <FieldArray name="socialLinks">
+//                             {({ push, remove, form }) => (
+//                                 <div>
+//                                     {form.values.socialLinks.map((_, index) => (
+//                                         <div key={index} className="flex items-center mb-2">
+//                                             <Field name={`socialLinks.${index}`} type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
+//                                             <button type="button" onClick={() => remove(index)} className="ml-2 text-red-500">Remove</button>
+//                                         </div>
+//                                     ))}
+//                                     <button type="button" onClick={() => push('')} className="mt-2 text-blue-500">Add Link</button>
+//                                 </div>
+//                             )}
+//                         </FieldArray>
+//                     </div>
+//                     <div className="md:col-span-2 flex justify-between">
+//                         <button type="button" onClick={nextStep} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Next</button>
+//                     </div>
+//                 </Form>
+//             )}
+//         </Formik>
+//     );
+// };
+
+
+
+
 
 const CareerInfo = ({ nextStep, prevStep }) => {
     const validationSchema = Yup.object({

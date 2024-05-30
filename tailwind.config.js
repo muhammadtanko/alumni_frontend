@@ -13,6 +13,7 @@ export default {
       "bgDArk": "#1F2A40",
       "white": "#fff",
       gray: colors.gray,
+      red: colors.red,
     },
     extend: {},
   },
