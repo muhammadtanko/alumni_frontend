@@ -3,54 +3,21 @@ import { Button, Label, TextInput } from "flowbite-react";
 import { HiMail, HiEye } from "react-icons/hi";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useState } from "react";
 import { Spinner } from "flowbite-react";
+import { useSelector, useDispatch } from "react-redux";
+import { loginUser, logout, loginStatus, message, error } from "../../store/reducers/userSlice";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-  const [isError, setIsError] = useState(false);
+  const dispatch = useDispatch();
   const handleClick = () => {
     navigate("/register");
   };
-
+  const { user, loginStatus, token, message, error } = useSelector((state) => state.user);
   const handleSubmit = async (values, { resetForm }) => {
-    setLoading(true);
-    setMessage('');
-    setIsError(false);
-
-    try {
-      const response = await fetch('http://localhost:4000/api/v1/user/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
-      const data = await response.json();
-      if (data.ok) {
-        setMessage(JSON.stringify(data.payLoad.message));
-        resetForm();
-        setLoading(false)
-        setTimeout(() => {
-          navigate("/dashboard")
-        }, 1500);
-      } else {
-        setIsError(true);
-        setMessage(data.message);
-        setTimeout(() => {
-          setMessage('');
-          setLoading(false)
-        }, 1500);
-      }
-    } catch (error) {
-      setMessage('An error occurred. Please try again.');
-      setIsError(true);
-    }
-
-
-  };
+    dispatch(loginUser(values));
+    // dispatch(logout());
+    };
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -131,15 +98,20 @@ const Login = () => {
               <Button
                 disabled={!(isValid && dirty)}
                 className="bg-bgDArk" type="submit">
-                {loading ? <Spinner size="sm" /> : 'Login'}
+                {loginStatus === "loading" ? <Spinner size="sm" /> : 'Login'}
               </Button>
 
             </Form>
           )}
         </Formik>
         {message && (
-          <div className={`mt-4 text-center ${isError ? 'text-red-500' : 'text-green-500'}`}>
+          <div className={"mt-4 text-center text-green-500"}>
             {message}
+          </div>
+        )}
+        {error && (
+          <div className={"mt-4 text-center text-red-500"}>
+            {error}
           </div>
         )}
       </div>

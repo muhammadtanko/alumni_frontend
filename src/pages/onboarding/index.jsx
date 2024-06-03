@@ -1,26 +1,43 @@
-
-
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { nextStep, previousStep, savecareerInfo, saveotherInfo, savepersonalInfo, submitFormData } from "../../store/reducers/userSlice"
+import { useState, useEffect } from 'react';
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 export default function Onboarding() {
-    const [currentStep, setCurrentStep] = useState(1);
-
-    const nextStep = () => {
-        setCurrentStep((prevStep) => (prevStep < 3 ? prevStep + 1 : prevStep));
+    const [currentStepper, setCurrentStepper] = useState(1);
+    const dispatch = useDispatch();
+    const { currentStep, personalInfo, careerInfo, otherInfo } = useSelector((state) => state.user);
+    const next = () => {
+        setCurrentStepper((prevStep) => (prevStep < 3 ? prevStep + 1 : prevStep));
+        dispatch(nextStep());
     };
     const prevStep = () => {
-        setCurrentStep((prevStep) => (prevStep > 1 ? prevStep - 1 : prevStep));
+        setCurrentStepper((prevStep) => (prevStep > 1 ? prevStep - 1 : prevStep));
+        dispatch(previousStep());
+    };
+    const handleFinalSubmit = () => {
+        const completeData = { ...personalInfo, ...careerInfo, ...otherInfo };
+        console.log("completeData>>>", completeData);
+        dispatch(submitFormData(completeData));
     };
 
+    useEffect(() => {
+
+        if (currentStep === 4) {
+            handleFinalSubmit();
+        }
+    }, [currentStep]);
+    useEffect(() => {
+        console.log({ personalInfo, careerInfo, otherInfo });
+    }, []);
     return (
         <div className="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
             <div className="container max-w-screen-lg mx-auto">
                 <div>
                     <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
                         <ol className="flex items-center w-full text-sm font-medium text-center text-gray-500 sm:text-base mb-5">
-                            <li className={`flex md:w-full items-center sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 ${currentStep === 1 ? 'text-blue-600' : ''}`}>
+                            <li className={`flex md:w-full items-center sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 ${currentStepper === 1 ? 'text-blue-600' : ''}`}>
                                 <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200">
                                     <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
@@ -28,13 +45,13 @@ export default function Onboarding() {
                                     Personal <span className="hidden sm:inline-flex sm:ms-2">Info</span>
                                 </span>
                             </li>
-                            <li className={`flex md:w-full items-center sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 ${currentStep === 2 ? 'text-blue-600' : ''}`}>
+                            <li className={`flex md:w-full items-center sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 ${currentStepper === 2 ? 'text-blue-600' : ''}`}>
                                 <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200">
                                     <span className="me-2">2</span>
                                     Career <span className="hidden sm:inline-flex sm:ms-2">Info</span>
                                 </span>
                             </li>
-                            <li className={`flex items-center ${currentStep === 3 ? 'text-blue-600' : ''}`}>
+                            <li className={`flex items-center ${currentStepper === 3 ? 'text-blue-600' : ''}`}>
                                 <span className="me-2">3</span>
                                 Others
                             </li>
@@ -42,14 +59,14 @@ export default function Onboarding() {
 
                         <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
                             <div className="text-gray-600">
-                                <p className="font-medium text-lg">{currentStep === 1 ? "Personal Details" : currentStep === 2 ? "Career Details" : "Other Details"}</p>
+                                <p className="font-medium text-lg">{currentStepper === 1 ? "Personal Details" : currentStepper === 2 ? "Career Details" : "Other Details"}</p>
                                 <p>Please fill out all the fields.</p>
                             </div>
 
                             <div className="lg:col-span-2">
-                                {currentStep === 1 && <PersonalInfo nextStep={nextStep} />}
-                                {currentStep === 2 && <CareerInfo nextStep={nextStep} prevStep={prevStep} />}
-                                {currentStep === 3 && <OtherInfo prevStep={prevStep} />}
+                                {currentStepper === 1 && <PersonalInfo next={next} />}
+                                {currentStepper === 2 && <CareerInfo next={next} prevStep={prevStep} />}
+                                {currentStepper === 3 && <OtherInfo prevStep={prevStep} />}
                             </div>
                         </div>
                     </div>
@@ -59,7 +76,9 @@ export default function Onboarding() {
     );
 }
 
-const PersonalInfo = ({ nextStep, prevStep }) => {
+const PersonalInfo = ({ next }) => {
+    const dispatch = useDispatch();
+    const personalInfo = useSelector((state) => state.user.personalInfo);
     const validationSchema = Yup.object({
         phone: Yup.string().required('Phone number is required'),
         city: Yup.string().required('City is required'),
@@ -71,11 +90,20 @@ const PersonalInfo = ({ nextStep, prevStep }) => {
 
     return (
         <Formik
-            initialValues={{ phone: '', city: '', photo: null, sports: [''], socialLinks: [''], country: '' }}
+            initialValues={{
+                phone: personalInfo.phone || '',
+                city: personalInfo.city || '',
+                photo: personalInfo.photo || null,
+                sports: personalInfo.sports || [''],
+                socialLinks: personalInfo.socialLinks || [''],
+                country: personalInfo.country || ''
+            }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
                 console.log(values);
-                nextStep();
+                dispatch(nextStep());
+                dispatch(savepersonalInfo(values));
+                next()
             }}
         >
             {({ setFieldValue }) => (
@@ -86,6 +114,11 @@ const PersonalInfo = ({ nextStep, prevStep }) => {
                         <ErrorMessage name="phone" component="div" className="text-red-500 text-xs" />
                     </div>
                     <div className="md:col-span-1">
+                        <label htmlFor="phone">photo</label>
+                        <Field name="photo" type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
+                        <ErrorMessage name="photo" component="div" className="text-red-500 text-xs" />
+                    </div>
+                    {/* <div className="md:col-span-1">
                         <label htmlFor="photo">Photo</label>
                         <input
                             name="photo"
@@ -96,7 +129,7 @@ const PersonalInfo = ({ nextStep, prevStep }) => {
                             className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                         />
                         <ErrorMessage name="photo" component="div" className="text-red-500 text-xs" />
-                    </div>
+                    </div> */}
                     <div className="md:col-span-1">
                         <label htmlFor="country">Country</label>
                         <Field as="select" name="country" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
@@ -111,7 +144,7 @@ const PersonalInfo = ({ nextStep, prevStep }) => {
                         <Field name="city" type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
                         <ErrorMessage name="city" component="div" className="text-red-500 text-xs" />
                     </div>
-                    
+
                     <div className="md:col-span-1">
                         <label htmlFor="sports">Sports</label>
                         <FieldArray name="sports">
@@ -146,9 +179,9 @@ const PersonalInfo = ({ nextStep, prevStep }) => {
                         </FieldArray>
                         <ErrorMessage name="socialLinks" component="div" className="text-red-500 text-xs" />
                     </div>
-                   
+
                     <div className="md:col-span-2 flex justify-between">
-                       
+
                         <button type="submit" className="bg-bgDArk text-white font-bold py-2 px-4 rounded">Next</button>
                     </div>
                 </Form>
@@ -157,7 +190,9 @@ const PersonalInfo = ({ nextStep, prevStep }) => {
     );
 };
 
-const CareerInfo = ({ nextStep, prevStep }) => {
+const CareerInfo = ({ next, prevStep }) => {
+    const dispatch = useDispatch();
+    const careerInfo = useSelector((state) => state.user.careerInfo);
     const validationSchema = Yup.object({
         fieldOfStudy: Yup.array().of(Yup.string().required('Field of study is required')),
         profession: Yup.array().of(Yup.string().required('Profession is required')),
@@ -166,11 +201,17 @@ const CareerInfo = ({ nextStep, prevStep }) => {
 
     return (
         <Formik
-            initialValues={{ fieldOfStudy: [''], profession: [''], businessVentures: [''] }}
+            initialValues={{
+                fieldOfStudy: careerInfo.fieldOfStudy || [''],
+                profession: careerInfo.profession || [''],
+                businessVentures: careerInfo.businessVentures || ['']
+            }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
                 console.log(values);
-                nextStep();
+                dispatch(nextStep());
+                dispatch(savecareerInfo(values));
+                next()
             }}
         >
             <Form className="grid gap-4 gap-y-2 text-sm grid-cols-2 md:grid-cols-5">
@@ -234,8 +275,9 @@ const CareerInfo = ({ nextStep, prevStep }) => {
     );
 };
 
-
 const OtherInfo = ({ prevStep }) => {
+    const dispatch = useDispatch();
+    const otherInfo = useSelector((state) => state.user.otherInfo);
     const validationSchema = Yup.object({
         hobbies: Yup.string().required('Hobbies are required'),
         bio: Yup.string().required('Bio is required'),
@@ -243,11 +285,15 @@ const OtherInfo = ({ prevStep }) => {
 
     return (
         <Formik
-            initialValues={{ hobbies: '', bio: '' }}
+            initialValues={{
+                hobbies: otherInfo.hobbies || '',
+                bio: otherInfo.bio || ''
+            }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
                 console.log(values);
-                alert('Form Submitted');
+                dispatch(saveotherInfo(values));
+                dispatch(nextStep());
             }}
         >
             <Form className="grid gap-4 gap-y-2 text-sm grid-cols-2 md:grid-cols-5">
