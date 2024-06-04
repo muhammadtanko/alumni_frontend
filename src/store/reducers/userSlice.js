@@ -31,11 +31,6 @@ export const submitFormData = createAsyncThunk(
             return thunkAPI.rejectWithValue(error.response.data);
         }
     })
-
-
-
-
-
 const initialState = {
     loginStatus: "idle",
     token: null,
@@ -54,15 +49,15 @@ const userSlice = createSlice({
     reducers: {
         savepersonalInfo: (state, action) => {
             state.personalInfo = action.payload;
-            state.currentStep = 2;
+            // state.currentStep = 2;
         },
         savecareerInfo: (state, action) => {
             state.careerInfo = action.payload;
-            state.currentStep = 3;
+            // state.currentStep = 3;
         },
         saveotherInfo: (state, action) => {
             state.otherInfo = action.payload;
-            state.currentStep = 4;
+            // state.currentStep = 4;
         },
         nextStep: (state) => {
             if (state.currentStep < 3) state.currentStep += 1;
@@ -72,7 +67,7 @@ const userSlice = createSlice({
         },
         logout: (state) => {
             state.loginStatus = "idle"
-            state.error= null;
+            state.error = null;
             state.message = null
             state.token = null
             state.user = []

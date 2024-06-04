@@ -10,7 +10,7 @@ export default function Onboarding() {
     const { currentStep, personalInfo, careerInfo, otherInfo } = useSelector((state) => state.user);
     const next = () => {
         setCurrentStepper((prevStep) => (prevStep < 3 ? prevStep + 1 : prevStep));
-        dispatch(nextStep());
+        // dispatch(nextStep());
     };
     const prevStep = () => {
         setCurrentStepper((prevStep) => (prevStep > 1 ? prevStep - 1 : prevStep));
@@ -62,7 +62,7 @@ export default function Onboarding() {
                                 <p className="font-medium text-lg">{currentStepper === 1 ? "Personal Details" : currentStepper === 2 ? "Career Details" : "Other Details"}</p>
                                 <p>Please fill out all the fields.</p>
                             </div>
-
+                            {currentStep}
                             <div className="lg:col-span-2">
                                 {currentStepper === 1 && <PersonalInfo next={next} />}
                                 {currentStepper === 2 && <CareerInfo next={next} prevStep={prevStep} />}
@@ -113,12 +113,12 @@ const PersonalInfo = ({ next }) => {
                         <Field name="phone" type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
                         <ErrorMessage name="phone" component="div" className="text-red-500 text-xs" />
                     </div>
-                    <div className="md:col-span-1">
+                    {/* <div className="md:col-span-1">
                         <label htmlFor="phone">photo</label>
                         <Field name="photo" type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
                         <ErrorMessage name="photo" component="div" className="text-red-500 text-xs" />
-                    </div>
-                    {/* <div className="md:col-span-1">
+                    </div> */}
+                    <div className="md:col-span-1">
                         <label htmlFor="photo">Photo</label>
                         <input
                             name="photo"
@@ -129,7 +129,7 @@ const PersonalInfo = ({ next }) => {
                             className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                         />
                         <ErrorMessage name="photo" component="div" className="text-red-500 text-xs" />
-                    </div> */}
+                    </div>
                     <div className="md:col-span-1">
                         <label htmlFor="country">Country</label>
                         <Field as="select" name="country" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
@@ -209,7 +209,7 @@ const CareerInfo = ({ next, prevStep }) => {
             validationSchema={validationSchema}
             onSubmit={(values) => {
                 console.log(values);
-                dispatch(nextStep());
+                // dispatch(nextStep());
                 dispatch(savecareerInfo(values));
                 next()
             }}
