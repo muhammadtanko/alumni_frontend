@@ -25,7 +25,9 @@ export const submitFormData = createAsyncThunk(
     "user",
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.post('/user', formData);
+            const response = await axios.post(
+                "http://localhost:4000/api/v1/user",
+                formData);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -49,19 +51,19 @@ const userSlice = createSlice({
     reducers: {
         savepersonalInfo: (state, action) => {
             state.personalInfo = action.payload;
-            // state.currentStep = 2;
+            state.currentStep = 2;
         },
         savecareerInfo: (state, action) => {
             state.careerInfo = action.payload;
-            // state.currentStep = 3;
+            state.currentStep = 3;
         },
         saveotherInfo: (state, action) => {
             state.otherInfo = action.payload;
-            // state.currentStep = 4;
+            state.currentStep = 4;
         },
-        nextStep: (state) => {
-            if (state.currentStep < 3) state.currentStep += 1;
-        },
+        // nextStep: (state) => {
+        //     if (state.currentStep < 3) state.currentStep += 1;
+        // },
         previousStep: (state) => {
             if (state.currentStep > 1) state.currentStep -= 1;
         },

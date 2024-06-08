@@ -11,6 +11,7 @@ export default function Onboarding() {
     const next = () => {
         setCurrentStepper((prevStep) => (prevStep < 3 ? prevStep + 1 : prevStep));
         // dispatch(nextStep());
+       
     };
     const prevStep = () => {
         setCurrentStepper((prevStep) => (prevStep > 1 ? prevStep - 1 : prevStep));
@@ -23,7 +24,6 @@ export default function Onboarding() {
     };
 
     useEffect(() => {
-
         if (currentStep === 4) {
             handleFinalSubmit();
         }
@@ -101,7 +101,7 @@ const PersonalInfo = ({ next }) => {
             validationSchema={validationSchema}
             onSubmit={(values) => {
                 console.log(values);
-                dispatch(nextStep());
+                // dispatch(nextStep());
                 dispatch(savepersonalInfo(values));
                 next()
             }}
@@ -293,7 +293,7 @@ const OtherInfo = ({ prevStep }) => {
             onSubmit={(values) => {
                 console.log(values);
                 dispatch(saveotherInfo(values));
-                dispatch(nextStep());
+                // dispatch(nextStep());
             }}
         >
             <Form className="grid gap-4 gap-y-2 text-sm grid-cols-2 md:grid-cols-5">
