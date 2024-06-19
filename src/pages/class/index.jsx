@@ -1,43 +1,17 @@
-import Layout from "../../layouts/layout"
+// src/pages/Class.js
+import Layout from "../../layouts/layout";
 import React, { useState } from 'react';
 import { Modal } from 'flowbite-react';
 import { useGetAllUsersQuery } from "../../store/reducers/apiSlice";
 
-
-const users = [
-  {
-    id: 1,
-    avatar: 'https://i.pravatar.cc/150?img=1',
-    name: 'John Doe',
-    class: '2006',
-    chapter: 'Abuja',
-    status: 'Inactive'
-  },
-  {
-    id: 2,
-    avatar: 'https://i.pravatar.cc/150?img=2',
-    name: 'Jane Smith',
-    class: '2007',
-    chapter: 'Kaduna',
-    status: 'Active'
-  },
-  {
-    id: 3,
-    avatar: 'https://i.pravatar.cc/150?img=3',
-    name: 'Sam Wilson',
-    class: '2009',
-    chapter: 'Kaduna',
-    status: 'Pending'
-  },
-  // Add more user data as needed
-];
-const { data, error, isLoading } = useGetAllUsersQuery()
 export default function Class() {
+  const { data, error, isLoading } = useGetAllUsersQuery();
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
+  const users = data?.users || [];
   const paginatedUsers = users.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   const totalPages = Math.ceil(users.length / itemsPerPage);
 
@@ -66,55 +40,61 @@ export default function Class() {
   return (
     <Layout>
       <div className="container mx-auto p-4">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avatar</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Class</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chapter</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {paginatedUsers.map(user => (
-              <tr key={user.id} onClick={() => handleRowClick(user)} className="hover:bg-gray-100 cursor-pointer">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full" />
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{user.class}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{user.chapter}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 py-1 rounded-full ${statusColors[user.status]}`}>
-                    {user.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <button
-                    onClick={(e) => { e.stopPropagation(); handleActivate(user.id); }}
-                    className={buttonStyles}
-                  >
-                    Activate
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {isLoading && <div>Loading...</div>}
+        {error && <div>Error: {error.message}</div>}
+        {!isLoading && !error && (
+          <>
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avatar</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Class</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chapter</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {paginatedUsers.map(user => (
+                  <tr key={user.id} onClick={() => handleRowClick(user)} className="hover:bg-gray-100 cursor-pointer">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full" />
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{user.class}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{user.chapter}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-2 py-1 rounded-full ${statusColors[user.status]}`}>
+                        {user.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleActivate(user.id); }}
+                        className={buttonStyles}
+                      >
+                        Activate
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-        <div className="mt-4 flex justify-center space-x-1">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-            <button
-              key={page}
-              onClick={() => handlePageChange(page)}
-              className={`px-3 py-1 rounded ${currentPage === page ? 'bg-gray-500 text-white' : 'bg-gray-200 text-gray-800'}`}
-            >
-              {page}
-            </button>
-          ))}
-        </div>
+            <div className="mt-4 flex justify-center space-x-1">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={`px-3 py-1 rounded ${currentPage === page ? 'bg-gray-500 text-white' : 'bg-gray-200 text-gray-800'}`}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
 
         {selectedUser && (
           <Modal
