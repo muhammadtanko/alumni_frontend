@@ -1,6 +1,8 @@
 import Layout from "../../layouts/layout"
 import React, { useState } from 'react';
 import { Modal } from 'flowbite-react';
+import { useGetAllUsersQuery } from "../../store/reducers/apiSlice";
+
 
 const users = [
   {
@@ -29,7 +31,7 @@ const users = [
   },
   // Add more user data as needed
 ];
-
+const { data, error, isLoading } = useGetAllUsersQuery()
 export default function Class() {
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);

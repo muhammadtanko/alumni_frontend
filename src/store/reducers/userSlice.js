@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { useNavigate } from "react-router-dom";
 
 export const loginUser = createAsyncThunk(
     "user/login",
@@ -144,6 +145,8 @@ const userSlice = createSlice({
             .addCase(submitFormData.fulfilled, (state, action) => {
                 console.log("fulfilled action:", action);
                 state.formStatus = "succeeded"
+                const navigate = useNavigate();
+                navigate("/dashboard")
                 // Clear form state or redirect user
             })
             .addCase(submitFormData.rejected, (state, action) => {
