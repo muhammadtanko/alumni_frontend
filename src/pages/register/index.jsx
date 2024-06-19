@@ -30,7 +30,7 @@ const Register = () => {
         setIsError(false);
         try {
             console.log("vals----", values);
-            const response = await fetch('http://localhost:4000/api/v1/user/', {
+            const response = await fetch('https://alumni-server-ymq4.onrender.com/api/v1/user/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -113,10 +113,11 @@ const Register = () => {
                                 <ErrorMessage name="password" component="div" className="text-red-500 text-xs" />
                             </div>
                             <div className="w-full md:w-[48%]">
+                                <Label htmlFor="chapter" value="Choose a Chapter" />
                                 <Field as="select" name="chapter" className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 w-full">
-                                    <option disabled>
+                                    {/* <option disabled>
                                         Choose a Chapter
-                                    </option>
+                                    </option> */}
                                     {chapters.map((chapter) => (
                                         <option key={chapter.code} value={chapter.code}>
                                             {chapter.name}
@@ -126,10 +127,11 @@ const Register = () => {
                                 <ErrorMessage name="chapter" component="div" className="text-red-500 text-xs" />
                             </div>
                             <div className="w-full md:w-[48%]">
+                                <Label htmlFor="graduationYear" value=" Year of Graduation" />
                                 <Field as="select" name="graduationYear" className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 w-full">
-                                    <option disabled >
+                                    {/* <option disabled >
                                         Year of Graduation
-                                    </option>
+                                    </option> */}
                                     {years.map((year) => (
                                         <option key={year} value={year}>
                                             {year}

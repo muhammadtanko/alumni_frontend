@@ -8,8 +8,8 @@ import Payment from "./pages/payments"
 import Email from "./pages/email"
 import Election from "./pages/election"
 import Chapter from "./pages/chapter"
-import Meeting from "./pages/login"
-import Gallery from "./pages/login"
+import Meeting from "./pages/meeting"
+import Gallery from "./pages/gallery"
 
 import Register from "./pages/register/index"
 function App() {

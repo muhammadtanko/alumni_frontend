@@ -5,19 +5,37 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Spinner } from "flowbite-react";
 import { useSelector, useDispatch } from "react-redux";
-import { loginUser, logout, loginStatus, message, error } from "../../store/reducers/userSlice";
+import { loginUser, clearMessage, clearError } from "../../store/reducers/userSlice";
+import { useEffect } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { loginStatus, message, error, user } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (loginStatus === 'succeeded' && message) {
+      if (user.registrationStatus === "incomplete") {
+        const timer = setTimeout(() => {
+          dispatch(clearMessage());
+          navigate('/onboarding');
+        }, 3000);
+        return () => clearTimeout(timer);
+      } else {
+        const timer = setTimeout(() => {
+          dispatch(clearMessage());
+          navigate('/dashboard');
+        }, 3000);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [loginStatus])
   const handleClick = () => {
     navigate("/register");
   };
-  const { user, loginStatus, token, message, error } = useSelector((state) => state.user);
   const handleSubmit = async (values, { resetForm }) => {
     dispatch(loginUser(values));
-    // dispatch(logout());
-    };
+  };
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -27,7 +45,8 @@ const Login = () => {
       .min(8, "Password must be at least 8 characters")
       .required("Password is required"),
   });
-
+  const displayMessage = typeof message === 'string' ? message : message?.message;
+  const displayError = typeof error === 'string' ? error : error?.message;
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-400 p-4">
       <div className="bg-white rounded shadow-2xl p-4 md:p-8 w-full md:w-[35%]">
@@ -80,9 +99,6 @@ const Login = () => {
                   component="div"
                   className="text-red-500 text-sm"
                 />
-              </div>
-              <div>
-                {/* {errors} */}
               </div>
               <div className="my-4">
                 <p className="text-base text-gray-500">

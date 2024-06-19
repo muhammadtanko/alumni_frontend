@@ -6,7 +6,7 @@ export const loginUser = createAsyncThunk(
     async (data, thunkAPI) => {
         try {
             const response = await axios.post(
-                "http://localhost:4000/api/v1/user/login",
+                "https://alumni-server-ymq4.onrender.com/api/v1/user/login",
                 data,
                 {
                     headers: {
@@ -21,13 +21,47 @@ export const loginUser = createAsyncThunk(
 
     }
 );
+export const registerUser = createAsyncThunk(
+    "user/register",
+    async (data, thunkAPI) => {
+        try {
+            const response = await axios.post(
+                "https://alumni-server-ymq4.onrender.com/api/v1/user",
+                data,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data)
+        }
+
+    }
+)
 export const submitFormData = createAsyncThunk(
     "user",
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.post(
-                "http://localhost:4000/api/v1/user",
-                formData);
+            const state = thunkAPI.getState();
+            console.log("state>>>", state.user.user._id);
+            const userId = state.user.user._id
+            const formDataToSend = new FormData();
+            Object.keys(formData).forEach(key => {
+                if (Array.isArray(formData[key])) {
+                    formData[key].forEach((value, index) => {
+                        formDataToSend.append(`${key}[${index}]`, value);
+                    });
+                } else {
+                    formDataToSend.append(key, formData[key]);
+                }
+            });
+            console.log("formDataToSend", formDataToSend);
+            const response = await axios.put(
+                `https://alumni-server-ymq4.onrender.com/api/v1/user/onboard/${userId}`,
+                formDataToSend);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -60,6 +94,12 @@ const userSlice = createSlice({
         saveotherInfo: (state, action) => {
             state.otherInfo = action.payload;
             state.currentStep = 4;
+        },
+        clearMessage: (state) => {
+            state.message = null;
+        },
+        clearError: (state) => {
+            state.error = null;
         },
         // nextStep: (state) => {
         //     if (state.currentStep < 3) state.currentStep += 1;
@@ -98,15 +138,27 @@ const userSlice = createSlice({
                 state.error = payload.customMessage;
             })
             .addCase(submitFormData.pending, (state, action) => {
+                console.log("Pending action:", action);
                 state.formStatus = "loading"
             })
             .addCase(submitFormData.fulfilled, (state, action) => {
+                console.log("fulfilled action:", action);
                 state.formStatus = "succeeded"
                 // Clear form state or redirect user
             })
             .addCase(submitFormData.rejected, (state, action) => {
                 state.status = 'failed';
+                console.log("rejected action:", action);
                 state.error = action.payload;
+            })
+            .addCase(registerUser.pending, (state, action) => {
+                console.log("Pending action:", action);
+            })
+            .addCase(registerUser.fulfilled, (state, action) => {
+                console.log("fulfilled action:", action);
+            })
+            .addCase(registerUser.rejected, (state, action) => {
+                console.log("rejected action:", action);
             });
     }
 });
@@ -116,5 +168,5 @@ export const user = (state) => state.user;
 export const loginStatus = (state) => state.loginStatus;
 export const message = (state) => state.message;
 export const error = (state) => state.error;
-export const { nextStep, previousStep, savecareerInfo, saveotherInfo, savepersonalInfo, logout } = userSlice.actions;
+export const { nextStep, previousStep, savecareerInfo, saveotherInfo, savepersonalInfo, logout, clearError, clearMessage } = userSlice.actions;
 export default userSlice.reducer;
