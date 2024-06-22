@@ -1,18 +1,36 @@
 // src/pages/Class.js
 import Layout from "../../layouts/layout";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from 'flowbite-react';
-import { useGetAllUsersQuery } from "../../store/reducers/apiSlice";
 
 export default function Class() {
-  const { data, error, isLoading } = useGetAllUsersQuery();
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [users, setUsers] = useState([]); // Ensure the initial state is an array
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const itemsPerPage = 5;
 
-  const users = data?.users || [];
-  const paginatedUsers = users.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('https://alumni-server-ymq4.onrender.com/api/v1/user');
+        const { ok, payLoad } = await response.json();
+        console.log("data", payLoad);
+        setUsers(payLoad); // Ensure the fetched data is set to the users state
+        setIsLoading(false);
+      } catch (error) {
+        setError(error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  // Ensure paginatedUsers is calculated only when users is an array
+  const paginatedUsers = Array.isArray(users) ? users.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : [];
   const totalPages = Math.ceil(users.length / itemsPerPage);
 
   const handleRowClick = (user) => {
@@ -61,9 +79,10 @@ export default function Class() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full" />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{user.class}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{user.chapter}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{`${user.firstName} ${user.lastName}`
+                    }</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{user.class.yearOfGraduation}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{user.chapter.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 py-1 rounded-full ${statusColors[user.status]}`}>
                         {user.status}

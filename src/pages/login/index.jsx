@@ -8,14 +8,18 @@ import { useSelector, useDispatch } from "react-redux";
 import { loginUser, clearMessage, clearError } from "../../store/reducers/userSlice";
 import { useEffect } from "react";
 
+
+
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loginStatus, message, error, user } = useSelector((state) => state.user);
+  const loginStatus = useSelector((state) => state.user.loginStatus);
+  const registrationStatus = useSelector((state) => state.user.registrationStatus);
+  const { message, error } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (loginStatus === 'succeeded' && message) {
-      if (user.registrationStatus === "incomplete") {
+    if (loginStatus === 'succeeded') {
+      if (registrationStatus === "incomplete") {
         const timer = setTimeout(() => {
           dispatch(clearMessage());
           navigate('/onboarding');
@@ -29,12 +33,14 @@ const Login = () => {
         return () => clearTimeout(timer);
       }
     }
-  }, [loginStatus])
+  }, [loginStatus, registrationStatus])
   const handleClick = () => {
     navigate("/register");
   };
+  
   const handleSubmit = async (values, { resetForm }) => {
     dispatch(loginUser(values));
+
   };
 
   const validationSchema = Yup.object({
@@ -120,16 +126,17 @@ const Login = () => {
             </Form>
           )}
         </Formik>
-        {message && (
+        {displayMessage && (
           <div className={"mt-4 text-center text-green-500"}>
-            {message}
+            {displayMessage}
           </div>
         )}
-        {error && (
+        {displayError && (
           <div className={"mt-4 text-center text-red-500"}>
-            {error}
+            {displayError}
           </div>
         )}
+       
       </div>
     </div>
   );

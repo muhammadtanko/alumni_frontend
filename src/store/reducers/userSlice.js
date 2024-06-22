@@ -1,6 +1,5 @@
 import axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { useNavigate } from "react-router-dom";
 
 export const loginUser = createAsyncThunk(
     "user/login",
@@ -78,7 +77,8 @@ const initialState = {
     careerInfo: {},
     otherInfo: {},
     error: null,
-    message: null
+    message: null,
+    registrationStatus: null
 }
 const userSlice = createSlice({
     name: "user",
@@ -114,6 +114,10 @@ const userSlice = createSlice({
             state.message = null
             state.token = null
             state.user = []
+            state.personalInfo = {}
+            state.careerInfo = {}
+            state.otherInfo = {}
+            console.log("cleared!!!!!!!");
         }
     },
     extraReducers(builder) {
@@ -128,9 +132,10 @@ const userSlice = createSlice({
                 const { payload } = action;
                 state.message = payload.customMessage;
                 const data = payload.payLoad
-                console.log("data", data);
                 state.token = data.jwToken
                 state.user = data
+                state.registrationStatus = data.registrationStatus
+
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.loginStatus = "failed";
@@ -145,12 +150,12 @@ const userSlice = createSlice({
             .addCase(submitFormData.fulfilled, (state, action) => {
                 console.log("fulfilled action:", action);
                 state.formStatus = "succeeded"
-                const navigate = useNavigate();
-                navigate("/dashboard")
+                const { payload } = action;
+                state.message = payload.message;
                 // Clear form state or redirect user
             })
             .addCase(submitFormData.rejected, (state, action) => {
-                state.status = 'failed';
+                state.formStatus = 'failed';
                 console.log("rejected action:", action);
                 state.error = action.payload;
             })

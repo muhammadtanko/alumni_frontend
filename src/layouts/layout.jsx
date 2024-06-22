@@ -1,7 +1,7 @@
 import { SideBar } from "../components/sideBar";
 import PropTypes from "prop-types";
 
-const Layout = ({ children, title }) => {
+const Layout = ({ children }) => {
 
     return (
         <div className="flex min-h-screen overflow-hidden">
@@ -17,6 +17,6 @@ const Layout = ({ children, title }) => {
 };
 Layout.propTypes = {
     children: PropTypes.node.isRequired,
-    title: PropTypes.string.isRequired,
+    // title: PropTypes.string.isRequired,
 };
 export default Layout;

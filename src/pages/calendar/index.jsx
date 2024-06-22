@@ -11,7 +11,7 @@ export default function Calendar() {
   return (
 
     <Layout>
-      <div className=" flex justify-between ">
+      <div className="flex">
         <FullCalendar
           plugins={[dayGridPlugin]}
           initialView="dayGridMonth"

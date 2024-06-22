@@ -11,9 +11,9 @@ import { IoPeople } from "react-icons/io5";
 import { GiThreeFriends } from "react-icons/gi";
 import { SiGooglemeet } from "react-icons/si";
 import { GrGallery } from "react-icons/gr";
+import { useSelector } from "react-redux";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
-
     return (
         <MenuItem
             active={selected === title}
@@ -27,7 +27,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
             <div className="">
                 {title}
             </div>
-            
+
         </MenuItem>
     );
 };
@@ -39,6 +39,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 export const SideBar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Dashboard");
+    const user = useSelector((state) => state.user.user);
     return (
         <div style={{
             "& .pro-menu-item.active": {
@@ -67,7 +68,7 @@ export const SideBar = () => {
                         {
                             !isCollapsed && (
                                 <div className="flex justify-between ml-[15px] items-center text-white  ">
-                                    <p>ADMIN</p>
+                                    <p>{user.userType}</p>
                                     <FiMenu
                                         onClick={() => {
                                             setIsCollapsed(!isCollapsed)
@@ -83,7 +84,7 @@ export const SideBar = () => {
                                 <img
                                     className="w-24 h-24 cursor-pointer rounded-full"
                                     alt="profile-user"
-                                    src={`/images/moha.svg`}
+                                    src={user.photo}
                                 />
                             </div>
                         )
@@ -156,7 +157,7 @@ export const SideBar = () => {
                             selected={selected}
                             setSelected={setSelected}
                         />
-                           <Item
+                        <Item
                             title="Gallery"
                             to="/gallery"
                             icon={<GrGallery />}

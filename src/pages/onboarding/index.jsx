@@ -1,17 +1,18 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { nextStep, previousStep, savecareerInfo, saveotherInfo, savepersonalInfo, submitFormData } from "../../store/reducers/userSlice"
+import { nextStep, previousStep, savecareerInfo, saveotherInfo, savepersonalInfo, submitFormData, logout,clearMessage } from "../../store/reducers/userSlice"
 import { useState, useEffect } from 'react';
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 
 export default function Onboarding() {
     const [currentStepper, setCurrentStepper] = useState(1);
     const dispatch = useDispatch();
-    const { currentStep, personalInfo, careerInfo, otherInfo } = useSelector((state) => state.user);
+    const navigate = useNavigate();
+    const { currentStep, personalInfo, careerInfo, otherInfo, message, error} = useSelector((state) => state.user);
+    const formStatus = useSelector((state) => state.user.formStatus);
     const next = () => {
         setCurrentStepper((prevStep) => (prevStep < 3 ? prevStep + 1 : prevStep));
-        // dispatch(nextStep());
-       
     };
     const prevStep = () => {
         setCurrentStepper((prevStep) => (prevStep > 1 ? prevStep - 1 : prevStep));
@@ -22,15 +23,27 @@ export default function Onboarding() {
         console.log("completeData>>>", completeData);
         dispatch(submitFormData(completeData));
     };
-
+    const logo = () => {
+        dispatch(logout());
+    };
+    const displayMessage = typeof message === 'string' ? message : message?.message;
+    const displayError = typeof error === 'string' ? error : error?.message;
     useEffect(() => {
         if (currentStep === 4) {
             handleFinalSubmit();
         }
     }, [currentStep]);
     useEffect(() => {
-        console.log({ personalInfo, careerInfo, otherInfo });
-    }, []);
+        // state.formStatus = "succeeded"
+        if (formStatus ==="succeeded") {
+            const timer = setTimeout(() => {
+                dispatch(clearMessage());
+                navigate('/class');
+              }, 3000);
+              return () => clearTimeout(timer);
+            } else {
+        }
+    }, [formStatus]);
     return (
         <div className="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
             <div className="container max-w-screen-lg mx-auto">
@@ -56,7 +69,16 @@ export default function Onboarding() {
                                 Others
                             </li>
                         </ol>
-
+                        <div className="my-4">
+                            <p className="text-base text-gray-500">
+                                <span
+                                    className="underline cursor-pointer"
+                                    onClick={logo}
+                                >
+                                    logout
+                                </span>
+                            </p>
+                        </div>
                         <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
                             <div className="text-gray-600">
                                 <p className="font-medium text-lg">{currentStepper === 1 ? "Personal Details" : currentStepper === 2 ? "Career Details" : "Other Details"}</p>
@@ -68,6 +90,16 @@ export default function Onboarding() {
                                 {currentStepper === 2 && <CareerInfo next={next} prevStep={prevStep} />}
                                 {currentStepper === 3 && <OtherInfo prevStep={prevStep} />}
                             </div>
+                            {displayMessage && (
+                                <div className={"mt-4 text-center text-green-500"}>
+                                    {displayMessage}
+                                </div>
+                            )}
+                            {displayError && (
+                                <div className={"mt-4 text-center text-red-500"}>
+                                    {displayError}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
