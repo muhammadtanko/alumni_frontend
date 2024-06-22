@@ -46,7 +46,6 @@ export const submitFormData = createAsyncThunk(
     async (formData, thunkAPI) => {
         try {
             const state = thunkAPI.getState();
-            console.log("state>>>", state.user.user._id);
             const userId = state.user.user._id
             const formDataToSend = new FormData();
             Object.keys(formData).forEach(key => {

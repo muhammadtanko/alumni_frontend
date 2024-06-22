@@ -42,7 +42,7 @@ export const SideBar = () => {
     const user = useSelector((state) => state.user.user);
     return (
         <div style={{
-            "& .pro-menu-item.active": {
+            "& .proMenuItem.active": {
                 color: "#6870fa !important",
             },
         }} className="text-white">

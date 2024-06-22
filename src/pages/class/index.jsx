@@ -75,9 +75,9 @@ export default function Class() {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {paginatedUsers.map(user => (
-                  <tr key={user.id} onClick={() => handleRowClick(user)} className="hover:bg-gray-100 cursor-pointer">
+                  <tr key={user._id} onClick={() => handleRowClick(user)} className="hover:bg-gray-100 cursor-pointer">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full" />
+                      <img src={user.photo} alt={user.name} className="w-10 h-10 rounded-full" />
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">{`${user.firstName} ${user.lastName}`
                     }</td>
@@ -125,11 +125,12 @@ export default function Class() {
             <Modal.Header />
             <Modal.Body>
               <div className="text-center">
-                <img src={selectedUser.avatar} alt={selectedUser.name} className="w-32 h-32 rounded-full mx-auto" />
-                <h3 className="mt-4 text-xl font-medium text-gray-900">{selectedUser.name}</h3>
-                <p className="text-sm text-gray-500">{selectedUser.class} - {selectedUser.chapter}</p>
+                <img src={selectedUser.photo} alt={selectedUser.name} className="w-32 h-32 rounded-full mx-auto" />
+                <h3 className="mt-4 text-xl font-medium text-gray-900">{`${selectedUser.firstName} ${selectedUser.lastName}`}</h3>
+                <p className="text-sm text-gray-500">{selectedUser.class.yearOfGraduation} - {selectedUser.chapter.name}</p>
               </div>
             </Modal.Body>
+            
           </Modal>
         )}
       </div>
