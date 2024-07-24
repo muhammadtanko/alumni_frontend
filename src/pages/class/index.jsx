@@ -15,8 +15,9 @@ export default function Class() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
+        console.log("fetching!!");
         const response = await fetch('https://alumni-server-ymq4.onrender.com/api/v1/user');
-        const { ok, payLoad } = await response.json();
+        const { payLoad } = await response.json();
         console.log("data", payLoad);
         setUsers(payLoad); // Ensure the fetched data is set to the users state
         setIsLoading(false);
@@ -43,17 +44,19 @@ export default function Class() {
     console.log(`Activating user with ID: ${userId}`);
   };
 
+  const handleDeactivate= (userId)=>{
+    console.log(`Deactivating user with ID: ${userId}`);
+  }
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
   const statusColors = {
-    'Active': 'bg-green-200 text-green-800',
-    'Inactive': 'bg-red-200 text-red-800',
+    'Active': 'bg-green-100 text-green-800',
+    'Disabled': ' bg-red-100 text-red-800',
     'Pending': 'bg-yellow-200 text-yellow-800'
   };
 
-  const buttonStyles = 'bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-800';
 
   return (
     <Layout>
@@ -69,6 +72,9 @@ export default function Class() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Class</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chapter</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Country</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">City/State</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
@@ -83,18 +89,26 @@ export default function Class() {
                     }</td>
                     <td className="px-6 py-4 whitespace-nowrap">{user.class.yearOfGraduation}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{user.chapter.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{user.phoneNumber}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{user.countryOfResidence}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{user.stateOrCity}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 py-1 rounded-full ${statusColors[user.status]}`}>
                         {user.status}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={(e) => { e.stopPropagation(); handleActivate(user.id); }}
-                        className={buttonStyles}
+                      {user.status !=="Active" ? <button
+                        onClick={(e) => { e.stopPropagation(); handleActivate(user._id); }}
+                        className="bg-green-500 hover:bg-green-700 text-white px-3 py-1 rounded "
                       >
                         Activate
-                      </button>
+                      </button>:<button
+                        onClick={(e) => { e.stopPropagation(); handleDeactivate(user._id); }}
+                        className="bg-yellow-800 text-white px-3 py-1 rounded hover:bg-yellow-200"
+                      >
+                        Deactivate
+                      </button>}
                     </td>
                   </tr>
                 ))}
@@ -130,7 +144,7 @@ export default function Class() {
                 <p className="text-sm text-gray-500">{selectedUser.class.yearOfGraduation} - {selectedUser.chapter.name}</p>
               </div>
             </Modal.Body>
-            
+
           </Modal>
         )}
       </div>

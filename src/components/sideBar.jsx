@@ -7,12 +7,13 @@ import { IoMdHome } from "react-icons/io";
 import { BsReceipt } from "react-icons/bs";
 import { MdHowToVote } from "react-icons/md";
 import { MdOutlineMarkEmailUnread } from "react-icons/md";
+import { Button } from "flowbite-react"
 import { IoPeople } from "react-icons/io5";
 import { GiThreeFriends } from "react-icons/gi";
 import { SiGooglemeet } from "react-icons/si";
 import { GrGallery } from "react-icons/gr";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../store/reducers/userSlice"
 const Item = ({ title, to, icon, selected, setSelected }) => {
     return (
         <MenuItem
@@ -40,6 +41,10 @@ export const SideBar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Dashboard");
     const user = useSelector((state) => state.user.user);
+    const dispatch = useDispatch();
+    const logOut = () => {
+        dispatch(logout())
+    }
     return (
         <div style={{
             "& .proMenuItem.active": {
@@ -164,6 +169,11 @@ export const SideBar = () => {
                             selected={selected}
                             setSelected={setSelected}
                         />
+                        {/* <div className="text-center">LOGOUT</div>
+                        <button>log</button> */}
+                        <Button
+                            onClick={logOut}
+                        >LOGOUT</Button>
                     </div>
 
                 </Menu>

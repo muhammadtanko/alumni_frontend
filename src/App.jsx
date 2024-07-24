@@ -10,8 +10,10 @@ import Election from "./pages/election"
 import Chapter from "./pages/chapter"
 import Meeting from "./pages/meeting"
 import Gallery from "./pages/gallery"
-
 import Register from "./pages/register/index"
+import Trial from "./pages/others/trial"
+
+
 function App() {
 
   return (
@@ -30,6 +32,7 @@ function App() {
           <Route path="/chapters" element={<Chapter />} />
           <Route path="/meetings" element={<Meeting />} />
           <Route path="/gallery" element={<Gallery />} />
+          <Route path="/trial" element={<Trial />} />
         </Routes>
       </main>
     </div>
