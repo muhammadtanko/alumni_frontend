@@ -3,7 +3,7 @@ import { Button, TextInput, Label } from "flowbite-react";
 import { HiMail, HiEye } from "react-icons/hi";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-
+import { configs } from "../../config";
 import { useState } from "react";
 import { Spinner } from "flowbite-react";
 
@@ -30,7 +30,8 @@ const Register = () => {
         setIsError(false);
         try {
             console.log("vals----", values);
-            const response = await fetch('https://alumni-server-ymq4.onrender.com/api/v1/user/', {
+            const response = await fetch(
+                `${configs.baseUrl}/user`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -56,6 +57,7 @@ const Register = () => {
                 }, 1500);
             }
         } catch (error) {
+            setLoading(false)
             setMessage('An error occurred. Please try again.');
             setIsError(true);
         }
@@ -69,7 +71,7 @@ const Register = () => {
         firstName: Yup.string().required("First Name is required"),
         lastName: Yup.string().required("Last Name is required"),
         email: Yup.string().email("Invalid email format").required("Email is required"),
-        password: Yup.string().required("Password is required"),
+        password: Yup.string().min(8, "Password must be at least 8 characters").required("Password is required"),
         chapter: Yup.string().required("Chapter is required"),
         graduationYear: Yup.string().required("Year of Graduation is required"),
         DOB: Yup.date().required("Date of Birth is required"),
@@ -115,9 +117,9 @@ const Register = () => {
                             <div className="w-full md:w-[48%]">
                                 <Label htmlFor="chapter" value="Choose a Chapter" />
                                 <Field as="select" name="chapter" className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 w-full">
-                                    {/* <option disabled>
-                                        Choose a Chapter
-                                    </option> */}
+                                    <option value="" disabled selected hidden>Please Choose...</option>
+                                    <option value="">Select below ..</option>
+
                                     {chapters.map((chapter) => (
                                         <option key={chapter.code} value={chapter.code}>
                                             {chapter.name}
@@ -129,9 +131,9 @@ const Register = () => {
                             <div className="w-full md:w-[48%]">
                                 <Label htmlFor="graduationYear" value=" Year of Graduation" />
                                 <Field as="select" name="graduationYear" className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 w-full">
-                                    {/* <option disabled >
-                                        Year of Graduation
-                                    </option> */}
+                                    <option value="" disabled selected hidden>Please Choose...</option>
+                                    <option value="">Select below ..</option>
+
                                     {years.map((year) => (
                                         <option key={year} value={year}>
                                             {year}

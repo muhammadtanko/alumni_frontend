@@ -2,22 +2,23 @@
 import Layout from "../../layouts/layout";
 import React, { useState, useEffect } from 'react';
 import { Modal } from 'flowbite-react';
-
-export default function Class() {
+import { configs } from "../../config";
+export default function Set() {
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [users, setUsers] = useState([]); // Ensure the initial state is an array
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const itemsPerPage = 5;
+  const itemsPerPage = 20;
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         console.log("fetching!!");
-        const response = await fetch('https://alumni-server-ymq4.onrender.com/api/v1/user');
+        const response = await fetch(`${configs.baseUrl}/user`);
         const { payLoad } = await response.json();
+        console.log("response", response);
         console.log("data", payLoad);
         setUsers(payLoad); // Ensure the fetched data is set to the users state
         setIsLoading(false);
@@ -32,7 +33,7 @@ export default function Class() {
 
   // Ensure paginatedUsers is calculated only when users is an array
   const paginatedUsers = Array.isArray(users) ? users.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : [];
-  const totalPages = Math.ceil(users.length / itemsPerPage);
+  const totalPages = Math.ceil(users?.length / itemsPerPage);
 
   const handleRowClick = (user) => {
     setSelectedUser(user);
@@ -44,7 +45,7 @@ export default function Class() {
     console.log(`Activating user with ID: ${userId}`);
   };
 
-  const handleDeactivate= (userId)=>{
+  const handleDeactivate = (userId) => {
     console.log(`Deactivating user with ID: ${userId}`);
   }
   const handlePageChange = (page) => {
@@ -64,15 +65,16 @@ export default function Class() {
         {isLoading && <div>Loading...</div>}
         {error && <div>Error: {error.message}</div>}
         {!isLoading && !error && (
-          <>
-            <table className="min-w-full divide-y divide-gray-200">
+          <div className="">
+            <table className="min-w-full divide-y divide-gray-200 ">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avatar</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Class</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Set</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chapter</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Country</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">City/State</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -87,9 +89,10 @@ export default function Class() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">{`${user.firstName} ${user.lastName}`
                     }</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{user.class.yearOfGraduation}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{user.set.yearOfGraduation}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{user.chapter.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{user.phoneNumber}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{user.countryOfResidence}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{user.stateOrCity}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -98,12 +101,12 @@ export default function Class() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {user.status !=="Active" ? <button
+                      {user.status !== "Active" ? <button
                         onClick={(e) => { e.stopPropagation(); handleActivate(user._id); }}
                         className="bg-green-500 hover:bg-green-700 text-white px-3 py-1 rounded "
                       >
                         Activate
-                      </button>:<button
+                      </button> : <button
                         onClick={(e) => { e.stopPropagation(); handleDeactivate(user._id); }}
                         className="bg-yellow-800 text-white px-3 py-1 rounded hover:bg-yellow-200"
                       >
@@ -126,7 +129,7 @@ export default function Class() {
                 </button>
               ))}
             </div>
-          </>
+          </div>
         )}
 
         {selectedUser && (

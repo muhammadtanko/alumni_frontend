@@ -28,7 +28,7 @@ const Login = () => {
       } else {
         const timer = setTimeout(() => {
           dispatch(clearMessage());
-          navigate('/dashboard');
+          navigate('/set');
         }, 3000);
         return () => clearTimeout(timer);
       }
@@ -37,7 +37,7 @@ const Login = () => {
   const handleClick = () => {
     navigate("/register");
   };
-  
+
   const handleSubmit = async (values, { resetForm }) => {
     dispatch(loginUser(values));
 
@@ -51,8 +51,10 @@ const Login = () => {
       .min(8, "Password must be at least 8 characters")
       .required("Password is required"),
   });
-  const displayMessage = typeof message === 'string' ? message : message?.message;
-  const displayError = typeof error === 'string' ? error : error?.message;
+ 
+  const displayMessage = error ? (typeof error === 'string' ? error : error?.message)
+    : (typeof message === 'string' ? message : message?.message);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-400 p-4">
       <div className="bg-white rounded shadow-2xl p-4 md:p-8 w-full md:w-[35%]">
@@ -127,16 +129,11 @@ const Login = () => {
           )}
         </Formik>
         {displayMessage && (
-          <div className={"mt-4 text-center text-green-500"}>
+          <div className={`mt-4 text-center ${error ? 'text-red-500' : 'text-green-500'}`}>
             {displayMessage}
           </div>
         )}
-        {displayError && (
-          <div className={"mt-4 text-center text-red-500"}>
-            {displayError}
-          </div>
-        )}
-       
+
       </div>
     </div>
   );

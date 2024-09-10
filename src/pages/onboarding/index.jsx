@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { nextStep, previousStep, savecareerInfo, saveotherInfo, savepersonalInfo, submitFormData, logout,clearMessage } from "../../store/reducers/userSlice"
+import { nextStep, previousStep, savecareerInfo, saveotherInfo, savepersonalInfo, submitFormData, logout, clearMessage } from "../../store/reducers/userSlice"
 import { useState, useEffect } from 'react';
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -9,7 +9,7 @@ export default function Onboarding() {
     const [currentStepper, setCurrentStepper] = useState(1);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { currentStep, personalInfo, careerInfo, otherInfo, message, error} = useSelector((state) => state.user);
+    const { currentStep, personalInfo, careerInfo, otherInfo, message, error } = useSelector((state) => state.user);
     const formStatus = useSelector((state) => state.user.formStatus);
     const next = () => {
         setCurrentStepper((prevStep) => (prevStep < 3 ? prevStep + 1 : prevStep));
@@ -35,13 +35,13 @@ export default function Onboarding() {
     }, [currentStep]);
     useEffect(() => {
         // state.formStatus = "succeeded"
-        if (formStatus ==="succeeded") {
+        if (formStatus === "succeeded") {
             const timer = setTimeout(() => {
                 dispatch(clearMessage());
-                navigate('/class');
-              }, 3000);
-              return () => clearTimeout(timer);
-            } else {
+                navigate('/set');
+            }, 3000);
+            return () => clearTimeout(timer);
+        } else {
         }
     }, [formStatus]);
     return (
@@ -69,7 +69,7 @@ export default function Onboarding() {
                                 Others
                             </li>
                         </ol>
-                        <div className="my-4">
+                        {/* <div className="my-4">
                             <p className="text-base text-gray-500">
                                 <span
                                     className="underline cursor-pointer"
@@ -78,7 +78,7 @@ export default function Onboarding() {
                                     logout
                                 </span>
                             </p>
-                        </div>
+                        </div> */}
                         <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
                             <div className="text-gray-600">
                                 <p className="font-medium text-lg">{currentStepper === 1 ? "Personal Details" : currentStepper === 2 ? "Career Details" : "Other Details"}</p>
@@ -112,7 +112,7 @@ const PersonalInfo = ({ next }) => {
     const dispatch = useDispatch();
     const personalInfo = useSelector((state) => state.user.personalInfo);
     const validationSchema = Yup.object({
-        phone: Yup.string().required('Phone number is required'),
+        phone: Yup.string().min(11).max(15).required('Phone number is required'),
         city: Yup.string().required('City is required'),
         photo: Yup.mixed().required('Photo is required'),
         sports: Yup.array().of(Yup.string().required('At least one sport is required')),
@@ -165,6 +165,8 @@ const PersonalInfo = ({ next }) => {
                     <div className="md:col-span-1">
                         <label htmlFor="country">Country</label>
                         <Field as="select" name="country" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
+                            <option value="" disabled selected hidden>Please Choose...</option>
+                            <option value="">Select below ..</option>
                             <option value="Nigeria">Nigeria</option>
                             <option value="Canada/USA">Canada/USA</option>
                             <option value="UK">United Kingdom</option>
@@ -172,7 +174,7 @@ const PersonalInfo = ({ next }) => {
                         <ErrorMessage name="country" component="div" className="text-red-500 text-xs" />
                     </div>
                     <div className="md:col-span-1">
-                        <label htmlFor="city">City</label>
+                        <label htmlFor="city">City or State</label>
                         <Field name="city" type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
                         <ErrorMessage name="city" component="div" className="text-red-500 text-xs" />
                     </div>

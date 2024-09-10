@@ -4,6 +4,7 @@ import { formatDate } from '@fullcalendar/core'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
+import listPlugin from '@fullcalendar/list'
 import interactionPlugin from '@fullcalendar/interaction'
 import { Modal } from 'flowbite-react';
 import { Button, TextInput, Label } from "flowbite-react";
@@ -31,7 +32,7 @@ function createEventId() {
 }
 
 
-export default function Calendar() {
+export default function Home() {
   const [currentEvents, setCurrentEvents] = useState([])
   const [showModal, setShowModal] = useState(false);
   const [selectedDateInfo, setSelectedDateInfo] = useState(null);
@@ -203,15 +204,15 @@ export default function Calendar() {
         />
         <div className='flex-grow h-full p-12'>
           <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin,listPlugin]}
             headerToolbar={{
               left: 'prev,next today',
               center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay'
+              right: 'dayGridMonth,timeGridWeek,timeGridDay,listYear'
             }}
             height="100%"
 
-            initialView='dayGridMonth'
+            initialView='listYear'
             editable={true}
             selectable={true}
             selectMirror={true}

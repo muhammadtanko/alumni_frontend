@@ -1,8 +1,8 @@
-import { Sidebar, Menu, MenuItem } from "react-pro-sidebar"
-import { Link } from "react-router-dom"
+import { Sidebar, Menu, MenuItem, menuClasses } from "react-pro-sidebar"
+import { Link, useNavigate } from "react-router-dom"
 import { FiMenu } from "react-icons/fi";
 import { useState } from "react";
-import { FaCalendar } from "react-icons/fa";
+import { MdDashboard } from "react-icons/md";
 import { IoMdHome } from "react-icons/io";
 import { BsReceipt } from "react-icons/bs";
 import { MdHowToVote } from "react-icons/md";
@@ -13,17 +13,26 @@ import { GiThreeFriends } from "react-icons/gi";
 import { SiGooglemeet } from "react-icons/si";
 import { GrGallery } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
+import { TbLogout } from "react-icons/tb";
 import { logout } from "../store/reducers/userSlice"
 const Item = ({ title, to, icon, selected, setSelected }) => {
     return (
         <MenuItem
             active={selected === title}
             style={{
-                color: "#e0e0e0",
+                // color: "#1f2a40",
             }}
+
             onClick={() => setSelected(title)}
             icon={icon}
             component={<Link to={to} />}
+            rootStyles={{
+                ['.' + menuClasses.button]: {
+                    '&:hover': {
+                        backgroundColor: 'greenyellow', // Changes the background color to red on hover
+                    },
+                },
+            }}
         >
             <div className="">
                 {title}
@@ -37,22 +46,20 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 
 
 
-export const SideBar = () => {
+function SideBar() {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Dashboard");
     const user = useSelector((state) => state.user.user);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const logOut = () => {
-        dispatch(logout())
+        dispatch(logout());
+        navigate('/');
     }
     return (
-        <div style={{
-            "& .proMenuItem.active": {
-                color: "#6870fa !important",
-            },
-        }} className="text-white">
+        <div style={{}} className="text-white">
             <Sidebar
-
                 backgroundColor="#1f2a40"
                 collapsed={isCollapsed}
                 style={{
@@ -60,20 +67,36 @@ export const SideBar = () => {
                 }}
 
             >
-                <Menu>
-                    {/* <div 
-                    style={{
-                        position:""
+                <Menu
+
+                    menuItemStyles={{
+                        button: {
+                            '&:hover': {
+                                backgroundColor: '#727681',
+                            },
+                        },
                     }}
-                    className=""> */}
+
+                    rootStyles={{
+                        [`.${menuClasses.icon}`]: {
+                            //   backgroundColor: '#e1e1e1',
+                            // color: '#344cff',
+                            // '&:hover': {
+                            //     color: 'red',
+                            // },
+                        },
+                    }}
+                >
                     <MenuItem
                         onClick={() => { setIsCollapsed(!isCollapsed) }}
                         icon={isCollapsed ? <FiMenu /> : undefined}
+
                     >
                         {
                             !isCollapsed && (
                                 <div className="flex justify-between ml-[15px] items-center text-white  ">
-                                    <p>{user.userType}</p>
+                                    {/* <p>{user.userType}</p> */}
+                                    <p>Admin</p>
                                     <FiMenu
                                         onClick={() => {
                                             setIsCollapsed(!isCollapsed)
@@ -90,6 +113,8 @@ export const SideBar = () => {
                                     className="w-24 h-24 cursor-pointer rounded-full"
                                     alt="profile-user"
                                     src={user.photo}
+                                // src='/images/moha.svg'
+
                                 />
                             </div>
                         )
@@ -107,9 +132,16 @@ export const SideBar = () => {
                         }}
                     >
                         <Item
-                            title="Dashboard"
-                            to="/dashboard"
+                            title="Home"
+                            to="/home"
                             icon={<IoMdHome />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
+                            title="Dashboard"
+                            to="/Dashboard"
+                            icon={<MdDashboard />}
                             selected={selected}
                             setSelected={setSelected}
                         />
@@ -120,30 +152,10 @@ export const SideBar = () => {
                             selected={selected}
                             setSelected={setSelected}
                         />
+
                         <Item
-                            title="Email"
-                            to="/email"
-                            icon={<MdOutlineMarkEmailUnread />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-                        <Item
-                            title="Calendar"
-                            to="/calendar"
-                            icon={<FaCalendar />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-                        <Item
-                            title="Election"
-                            to="/election"
-                            icon={<MdHowToVote />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-                        <Item
-                            title="Class"
-                            to="/class"
+                            title="Members"
+                            to="/set"
                             icon={<GiThreeFriends />}
                             selected={selected}
                             setSelected={setSelected}
@@ -156,8 +168,8 @@ export const SideBar = () => {
                             setSelected={setSelected}
                         />
                         <Item
-                            title="Meetings"
-                            to="/meetings"
+                            title="Events"
+                            to="/events"
                             icon={<SiGooglemeet />}
                             selected={selected}
                             setSelected={setSelected}
@@ -169,13 +181,32 @@ export const SideBar = () => {
                             selected={selected}
                             setSelected={setSelected}
                         />
+                        <Item
+                            title="Email"
+                            to="/email"
+                            icon={<MdOutlineMarkEmailUnread />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
+                            title="Election"
+                            to="/election"
+                            icon={<MdHowToVote />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
                         {/* <div className="text-center">LOGOUT</div>
                         <button>log</button> */}
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 mb-4 flex justify-center">
                         <Button
                             onClick={logOut}
-                        >LOGOUT</Button>
+                            className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+                        >
+                            <TbLogout size={20} />
+                            {isCollapsed ? null : <span>LOGOUT</span>}
+                        </Button>
                     </div>
-
                 </Menu>
             </Sidebar>
 
@@ -184,3 +215,4 @@ export const SideBar = () => {
     )
 }
 
+export default SideBar;

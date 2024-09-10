@@ -1,14 +1,10 @@
 import Layout from "../../layouts/layout"
-
+import Statistics from "../../components/stats"
 
 export default function Dashboard() {
     return (
         <Layout>
-            <div className="bg-bgDArk  text-white font-semibold text-5xl ">
-                <h1>
-                    DASHBOARD PAGE
-                </h1>
-            </div>
+            <Statistics />
         </Layout>
     )
 }

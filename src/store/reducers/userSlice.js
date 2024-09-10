@@ -1,12 +1,12 @@
 import axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
+import { configs } from "../../config";
 export const loginUser = createAsyncThunk(
     "user/login",
     async (data, thunkAPI) => {
         try {
             const response = await axios.post(
-                "https://alumni-server-ymq4.onrender.com/api/v1/user/login",
+                `${configs.baseUrl}/user/login`,
                 data,
                 {
                     headers: {
@@ -26,7 +26,7 @@ export const registerUser = createAsyncThunk(
     async (data, thunkAPI) => {
         try {
             const response = await axios.post(
-                "https://alumni-server-ymq4.onrender.com/api/v1/user",
+                `${configs.baseUrl}/user`,
                 data,
                 {
                     headers: {
@@ -59,7 +59,7 @@ export const submitFormData = createAsyncThunk(
             });
             console.log("formDataToSend", formDataToSend);
             const response = await axios.put(
-                `https://alumni-server-ymq4.onrender.com/api/v1/user/onboard/${userId}`,
+                `${configs.baseUrl}/user/onboard/${userId}`,
                 formDataToSend);
             return response.data;
         } catch (error) {
@@ -126,6 +126,7 @@ const userSlice = createSlice({
                 console.log("Pending action:", action);
             })
             .addCase(loginUser.fulfilled, (state, action) => {
+                state.error = null;
                 state.loginStatus = "succeeded";
                 console.log("fulfilled action:", action);
                 const { payload } = action;
@@ -156,7 +157,7 @@ const userSlice = createSlice({
             .addCase(submitFormData.rejected, (state, action) => {
                 state.formStatus = 'failed';
                 console.log("rejected action:", action);
-                state.error = action.payload;
+                state.error = 'Please try again';
             })
             .addCase(registerUser.pending, (state, action) => {
                 console.log("Pending action:", action);
