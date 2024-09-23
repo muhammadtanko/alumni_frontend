@@ -25,12 +25,23 @@ export const registerUser = createAsyncThunk(
     "user/register",
     async (data, thunkAPI) => {
         try {
+            console.log("trying >>registerUser");
+            const formDataToSend = new FormData()
+            Object.keys(data).forEach(key => {
+                if (Array.isArray(data[key])) {
+                    data[key].forEach((value, index) => {
+                        formDataToSend.append(`${key}[${index}]`, value);
+                    });
+                } else {
+                    formDataToSend.append(key, data[key])
+                }
+            })
             const response = await axios.post(
                 `${configs.baseUrl}/user`,
-                data,
+                formDataToSend,
                 {
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'multipart/form-data',
                     },
                 }
             );
@@ -77,7 +88,7 @@ const initialState = {
     otherInfo: {},
     error: null,
     message: null,
-    registrationStatus: null
+    registrationStatus:null
 }
 const userSlice = createSlice({
     name: "user",
@@ -130,8 +141,8 @@ const userSlice = createSlice({
                 state.loginStatus = "succeeded";
                 console.log("fulfilled action:", action);
                 const { payload } = action;
-                state.message = payload.customMessage;
-                const data = payload.payLoad
+                state.message = payload.payLoad.customMessage;
+                const data = payload.payLoad.data
                 state.token = data.jwToken
                 state.user = data
                 state.registrationStatus = data.registrationStatus
@@ -141,7 +152,7 @@ const userSlice = createSlice({
                 state.loginStatus = "failed";
                 console.log("rejected action:", action);
                 const { payload } = action;
-                state.error = payload.customMessage;
+                state.error = payload.message;
             })
             .addCase(submitFormData.pending, (state, action) => {
                 console.log("Pending action:", action);
@@ -157,16 +168,17 @@ const userSlice = createSlice({
             .addCase(submitFormData.rejected, (state, action) => {
                 state.formStatus = 'failed';
                 console.log("rejected action:", action);
-                state.error = 'Please try again';
+                // state.error = 'Please try again';
             })
             .addCase(registerUser.pending, (state, action) => {
-                console.log("Pending action:", action);
+                console.log("Pending registerUser action:", action);
+                console.log(" registerUser payload:", action.payload);
             })
             .addCase(registerUser.fulfilled, (state, action) => {
-                console.log("fulfilled action:", action);
+                console.log("fulfilled registerUser action:", action.payload);
             })
             .addCase(registerUser.rejected, (state, action) => {
-                console.log("rejected action:", action);
+                console.log("rejected registerUser action:", action.payload);
             });
     }
 });

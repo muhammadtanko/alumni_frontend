@@ -14,7 +14,7 @@ const store = configureStore({
     reducer:rootReducer,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: {
-            ignoredActionPaths: ['payload.photo'],
+            ignoredActionPaths: ['meta.arg', 'payload.photo'],
             ignoredPaths: ['user.personalInfo.photo'],
             ignoredActions: [
                 FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER

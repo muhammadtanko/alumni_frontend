@@ -55,7 +55,7 @@ function SideBar() {
 
     const logOut = () => {
         dispatch(logout());
-        navigate('/');
+        navigate('/login');
     }
     return (
         <div style={{}} className="text-white">

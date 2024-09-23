@@ -71,7 +71,7 @@ export default function Set() {
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avatar</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Set</th>
+                  {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Set</th> */}
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chapter</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
@@ -89,7 +89,7 @@ export default function Set() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">{`${user.firstName} ${user.lastName}`
                     }</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{user.set.yearOfGraduation}</td>
+                    {/* <td className="px-6 py-4 whitespace-nowrap">{user.set.yearOfGraduation}</td> */}
                     <td className="px-6 py-4 whitespace-nowrap">{user.chapter.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{user.phoneNumber}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>

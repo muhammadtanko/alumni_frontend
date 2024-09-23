@@ -28,12 +28,18 @@ const Login = () => {
       } else {
         const timer = setTimeout(() => {
           dispatch(clearMessage());
-          navigate('/set');
+          navigate('/');
         }, 3000);
         return () => clearTimeout(timer);
       }
     }
-  }, [loginStatus, registrationStatus])
+    if (error) {
+      const timer = setTimeout(() => {
+        dispatch(clearError());
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [loginStatus, registrationStatus,error])
   const handleClick = () => {
     navigate("/register");
   };
@@ -51,7 +57,7 @@ const Login = () => {
       .min(8, "Password must be at least 8 characters")
       .required("Password is required"),
   });
- 
+
   const displayMessage = error ? (typeof error === 'string' ? error : error?.message)
     : (typeof message === 'string' ? message : message?.message);
 

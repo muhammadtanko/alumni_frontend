@@ -1,17 +1,22 @@
 import { useNavigate } from "react-router-dom";
-import { Button, TextInput, Label } from "flowbite-react";
+import { Button, TextInput, Label, FileInput } from "flowbite-react";
 import { HiMail, HiEye } from "react-icons/hi";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { configs } from "../../config";
 import { useState } from "react";
 import { Spinner } from "flowbite-react";
+// import { registerUser } from "../../store/reducers/userSlice";
+// import { useSelector, useDispatch } from "react-redux";
+
 
 const Register = () => {
+    // const dispatch = useDispatch();
+
     const chapters = [
         { name: "USA/Canada", code: "us/canada" },
         { name: "Abuja", code: "abuja" },
-        { name: "UK", code: "united kingdom" },
+        { name: "UK", code: "UK" },
         { name: "Niger", code: "niger" },
         { name: "Rivers", code: "port harcourt" },
         { name: "Kaduna", code: "kaduna" },
@@ -25,36 +30,43 @@ const Register = () => {
     const [isError, setIsError] = useState(false);
 
     const handleSubmit = async (values, { resetForm }) => {
+        const formDataToSend = new FormData()
+        Object.keys(values).forEach(key => {
+            if (Array.isArray(values[key])) {
+                data[key].forEach((value, index) => {
+                    formDataToSend.append(`${key}[${index}]`, value);
+                });
+            } else {
+                formDataToSend.append(key, values[key])
+            }
+        })
         setLoading(true);
         setMessage('');
         setIsError(false);
         try {
-            console.log("vals----", values);
             const response = await fetch(
                 `${configs.baseUrl}/user`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(values),
+                body: formDataToSend,
             });
             console.log("response", response);
             const data = await response.json();
             console.log("data", data);
             if (data.ok) {
-                setMessage(JSON.stringify(data.payLoad.message));
+                setMessage(data.payLoad.message);
                 resetForm();
                 setLoading(false)
                 setTimeout(() => {
-                    navigate("/")
+                    navigate("/login")
                 }, 1500);
             } else {
                 setIsError(true);
                 setMessage(data.message);
                 setTimeout(() => {
                     setMessage('');
+                    resetForm();
                     setLoading(false)
-                }, 1500);
+                }, 3500);
             }
         } catch (error) {
             setLoading(false)
@@ -72,6 +84,7 @@ const Register = () => {
         lastName: Yup.string().required("Last Name is required"),
         email: Yup.string().email("Invalid email format").required("Email is required"),
         password: Yup.string().min(8, "Password must be at least 8 characters").required("Password is required"),
+        photo: Yup.mixed().required('Photo is required'),
         chapter: Yup.string().required("Chapter is required"),
         graduationYear: Yup.string().required("Year of Graduation is required"),
         DOB: Yup.date().required("Date of Birth is required"),
@@ -89,9 +102,10 @@ const Register = () => {
                         lastName: '',
                         email: '',
                         password: '',
+                        photo: '',
                         chapter: '',
                         graduationYear: '',
-                        DOB: null,
+                        DOB: "",
                     }}
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
@@ -99,26 +113,26 @@ const Register = () => {
                     {({ setFieldValue, isValid, dirty }) => (
                         <Form className="flex flex-col md:flex-row flex-wrap gap-4">
                             <div className="w-full md:w-[48%]">
-                                <Field as={TextInput} name="firstName" className="focus:border-blue-500 w-full" type="text" placeholder="First Name" shadow />
+                                <Field as={TextInput} name="firstName" className="focus:border-blue-500 w-full" type="text" placeholder="First Name" shadow="true" />
                                 <ErrorMessage name="firstName" component="div" className="text-red-500 text-xs" />
                             </div>
                             <div className="w-full md:w-[48%]">
-                                <Field as={TextInput} name="lastName" className="focus:border-blue-500 w-full" type="text" placeholder="Last Name" shadow />
+                                <Field as={TextInput} name="lastName" className="focus:border-blue-500 w-full" type="text" placeholder="Last Name" shadow="true" />
                                 <ErrorMessage name="lastName" component="div" className="text-red-500 text-xs" />
                             </div>
                             <div className="w-full md:w-[48%]">
-                                <Field as={TextInput} name="email" className="focus:border-blue-500 w-full" type="email" icon={HiMail} placeholder="Email" shadow />
+                                <Field as={TextInput} name="email" className="focus:border-blue-500 w-full" type="email" icon={HiMail} placeholder="Email" shadow="true" />
                                 <ErrorMessage name="email" component="div" className="text-red-500 text-xs" />
                             </div>
                             <div className="w-full md:w-[48%]">
-                                <Field as={TextInput} name="password" className="focus:border-blue-500 w-full" icon={HiEye} type="password" placeholder="Password" shadow />
+                                <Field as={TextInput} name="password" className="focus:border-blue-500 w-full" icon={HiEye} type="password" placeholder="Password" shadow="true" />
                                 <ErrorMessage name="password" component="div" className="text-red-500 text-xs" />
                             </div>
                             <div className="w-full md:w-[48%]">
                                 <Label htmlFor="chapter" value="Choose a Chapter" />
                                 <Field as="select" name="chapter" className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 w-full">
-                                    <option value="" disabled selected hidden>Please Choose...</option>
-                                    <option value="">Select below ..</option>
+                                    <option disabled selected hidden>Please Choose...</option>
+                                    <option >Select below ..</option>
 
                                     {chapters.map((chapter) => (
                                         <option key={chapter.code} value={chapter.code}>
@@ -131,8 +145,8 @@ const Register = () => {
                             <div className="w-full md:w-[48%]">
                                 <Label htmlFor="graduationYear" value=" Year of Graduation" />
                                 <Field as="select" name="graduationYear" className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 w-full">
-                                    <option value="" disabled selected hidden>Please Choose...</option>
-                                    <option value="">Select below ..</option>
+                                    <option disabled selected hidden>Please Choose...</option>
+                                    <option >Select below ..</option>
 
                                     {years.map((year) => (
                                         <option key={year} value={year}>
@@ -142,6 +156,29 @@ const Register = () => {
                                 </Field>
                                 <ErrorMessage name="graduationYear" component="div" className="text-red-500 text-xs" />
                             </div>
+
+
+                            <div className="w-full md:w-[48%]">
+                                <Label htmlFor="photo" value=" Photo" />
+                                <Field name="photo">
+                                    {({ form }) => (
+                                        <FileInput
+                                            className="focus:border-blue-500 w-full"
+                                            type="file"
+                                            placeholder="photo"
+                                            shadow="true"
+                                            onChange={(event) => {
+                                                form.setFieldValue("photo", event.currentTarget.files[0]); // Set the file in Formik's state
+                                            }}
+                                        />
+                                    )}
+                                </Field>
+
+                                <ErrorMessage name="photo" component="div" className="text-red-500 text-xs" />
+                            </div>
+
+
+
                             <div className="w-full md:w-[48%]">
                                 <Label htmlFor="DOB" value="Date Of Birth" />
                                 <Field name="DOB">

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { nextStep, previousStep, savecareerInfo, saveotherInfo, savepersonalInfo, submitFormData, logout, clearMessage } from "../../store/reducers/userSlice"
+import { previousStep, savecareerInfo, saveotherInfo, savepersonalInfo, submitFormData, logout, clearMessage } from "../../store/reducers/userSlice"
 import { useState, useEffect } from 'react';
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -84,7 +84,8 @@ export default function Onboarding() {
                                 <p className="font-medium text-lg">{currentStepper === 1 ? "Personal Details" : currentStepper === 2 ? "Career Details" : "Other Details"}</p>
                                 <p>Please fill out all the fields.</p>
                             </div>
-                            {currentStep}
+                            <span className="text-green-900 font-extrabold text-4xl">{currentStep}</span>
+
                             <div className="lg:col-span-2">
                                 {currentStepper === 1 && <PersonalInfo next={next} />}
                                 {currentStepper === 2 && <CareerInfo next={next} prevStep={prevStep} />}
@@ -114,7 +115,6 @@ const PersonalInfo = ({ next }) => {
     const validationSchema = Yup.object({
         phone: Yup.string().min(11).max(15).required('Phone number is required'),
         city: Yup.string().required('City is required'),
-        photo: Yup.mixed().required('Photo is required'),
         sports: Yup.array().of(Yup.string().required('At least one sport is required')),
         socialLinks: Yup.array().of(Yup.string().required('At least one social link is required')),
         country: Yup.string().oneOf(['Nigeria', 'Canada/USA', 'UK']).required('Country of residence is required'),
@@ -125,7 +125,6 @@ const PersonalInfo = ({ next }) => {
             initialValues={{
                 phone: personalInfo.phone || '',
                 city: personalInfo.city || '',
-                photo: personalInfo.photo || null,
                 sports: personalInfo.sports || [''],
                 socialLinks: personalInfo.socialLinks || [''],
                 country: personalInfo.country || ''
@@ -150,7 +149,7 @@ const PersonalInfo = ({ next }) => {
                         <Field name="photo" type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
                         <ErrorMessage name="photo" component="div" className="text-red-500 text-xs" />
                     </div> */}
-                    <div className="md:col-span-1">
+                    {/* <div className="md:col-span-1">
                         <label htmlFor="photo">Photo</label>
                         <input
                             name="photo"
@@ -161,7 +160,7 @@ const PersonalInfo = ({ next }) => {
                             className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                         />
                         <ErrorMessage name="photo" component="div" className="text-red-500 text-xs" />
-                    </div>
+                    </div> */}
                     <div className="md:col-span-1">
                         <label htmlFor="country">Country</label>
                         <Field as="select" name="country" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
