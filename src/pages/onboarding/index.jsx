@@ -70,16 +70,6 @@ export default function Onboarding() {
                                 Others
                             </li>
                         </ol>
-                        <div className="my-4">
-                            <p className="text-base text-red-500">
-                                <span
-                                    className="underline cursor-pointer"
-                                    onClick={logo}
-                                >
-                                    logout
-                                </span>
-                            </p>
-                        </div>
                         <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
                             <div className="text-gray-600">
                                 <p className="font-medium text-lg">{currentStepper === 1 ? "Personal Details" : currentStepper === 2 ? "Career Details" : "Other Details"}</p>
