@@ -7,7 +7,7 @@ import { Spinner } from "flowbite-react";
 import { useSelector, useDispatch } from "react-redux";
 import { loginUser, clearMessage, clearError } from "../../store/reducers/userSlice";
 import { useEffect } from "react";
-
+import { registrationStatus } from "../../store/reducers/userSlice";
 
 
 const Login = () => {
@@ -16,6 +16,7 @@ const Login = () => {
   const loginStatus = useSelector((state) => state.user.loginStatus);
   const registrationStatus = useSelector((state) => state.user.registrationStatus);
   const { message, error } = useSelector((state) => state.user);
+  const { currentStep } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (loginStatus === 'succeeded') {
@@ -28,7 +29,7 @@ const Login = () => {
       } else {
         const timer = setTimeout(() => {
           dispatch(clearMessage());
-          navigate('/');
+          navigate('/home');
         }, 3000);
         return () => clearTimeout(timer);
       }
@@ -39,7 +40,7 @@ const Login = () => {
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [loginStatus, registrationStatus,error])
+  }, [loginStatus, registrationStatus, error])
   const handleClick = () => {
     navigate("/register");
   };

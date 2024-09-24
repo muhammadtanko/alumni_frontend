@@ -46,8 +46,185 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 
 
 
-function SideBar() {
-    const [isCollapsed, setIsCollapsed] = useState(false);
+// function SideBar() {
+//     const [isCollapsed, setIsCollapsed] = useState(true);
+//     const [selected, setSelected] = useState("Dashboard");
+//     const user = useSelector((state) => state.user.user);
+//     const dispatch = useDispatch();
+//     const navigate = useNavigate();
+
+//     const logOut = () => {
+//         dispatch(logout());
+//         navigate('/');
+//     }
+//     return (
+//         <div style={{
+//             position: "fixed", 
+//             height: "100vh", 
+
+//         }} className="text-white">
+//             <Sidebar
+//                 backgroundColor="#1f2a40"
+//                 collapsed={isCollapsed}
+//                 style={{
+//                     height: "100%",
+//                 }}
+
+
+//             >
+//                 <Menu
+
+//                     menuItemStyles={{
+//                         button: {
+//                             '&:hover': {
+//                                 backgroundColor: '#727681',
+//                             },
+//                         },
+//                     }}
+
+//                     rootStyles={{
+//                         [`.${menuClasses.icon}`]: {
+//                             //   backgroundColor: '#e1e1e1',
+//                             // color: '#344cff',
+//                             // '&:hover': {
+//                             //     color: 'red',
+//                             // },
+//                         },
+//                     }}
+//                 >
+//                     <MenuItem
+//                         onClick={() => { setIsCollapsed(!isCollapsed) }}
+//                         icon={isCollapsed ? <FiMenu /> : undefined}
+
+//                     >
+//                         {
+//                             !isCollapsed && (
+//                                 <div className="flex justify-between ml-[15px] items-center text-white  ">
+//                                     {/* <p>{user.userType}</p> */}
+//                                     <p>Admin</p>
+//                                     <FiMenu
+//                                         onClick={() => {
+//                                             setIsCollapsed(!isCollapsed)
+//                                         }}
+//                                     />
+//                                 </div>
+//                             )
+//                         }
+//                     </MenuItem>
+//                     {
+//                         !isCollapsed && (
+//                             <div className="mb-5 flex justify-center items-center">
+//                                 <img
+//                                     className="w-24 h-24 cursor-pointer rounded-full"
+//                                     alt="profile-user"
+//                                     src={user.photo}
+//                                 // src='/images/moha.svg'
+
+//                                 />
+//                             </div>
+//                         )
+//                     }
+//                     {
+//                         !isCollapsed && (
+//                             <div className="mb-5 flex justify-center items-center">
+
+//                             </div>
+//                         )
+//                     }
+//                     {/* </div> */}
+//                     <div
+//                         style={{
+//                         }}
+//                     >
+//                         <Item
+//                             title="Home"
+//                             to="/home"
+//                             icon={<IoMdHome />}
+//                             selected={selected}
+//                             setSelected={setSelected}
+//                         />
+//                         <Item
+//                             title="Dashboard"
+//                             to="/Dashboard"
+//                             icon={<MdDashboard />}
+//                             selected={selected}
+//                             setSelected={setSelected}
+//                         />
+//                         <Item
+//                             title="Payments"
+//                             to="/payments"
+//                             icon={<BsReceipt />}
+//                             selected={selected}
+//                             setSelected={setSelected}
+//                         />
+
+//                         <Item
+//                             title="Members"
+//                             to="/set"
+//                             icon={<GiThreeFriends />}
+//                             selected={selected}
+//                             setSelected={setSelected}
+//                         />
+//                         <Item
+//                             title="Chapters"
+//                             to="/chapters"
+//                             icon={<IoPeople />}
+//                             selected={selected}
+//                             setSelected={setSelected}
+//                         />
+//                         <Item
+//                             title="Events"
+//                             to="/events"
+//                             icon={<SiGooglemeet />}
+//                             selected={selected}
+//                             setSelected={setSelected}
+//                         />
+//                         <Item
+//                             title="Gallery"
+//                             to="/gallery"
+//                             icon={<GrGallery />}
+//                             selected={selected}
+//                             setSelected={setSelected}
+//                         />
+//                         <Item
+//                             title="Email"
+//                             to="/email"
+//                             icon={<MdOutlineMarkEmailUnread />}
+//                             selected={selected}
+//                             setSelected={setSelected}
+//                         />
+//                         <Item
+//                             title="Election"
+//                             to="/election"
+//                             icon={<MdHowToVote />}
+//                             selected={selected}
+//                             setSelected={setSelected}
+//                         />
+//                         {/* <div className="text-center">LOGOUT</div>
+//                         <button>log</button> */}
+//                     </div>
+//                     <div className="absolute bottom-0 left-0 right-0 mb-4 flex justify-center">
+//                         <Button
+//                             onClick={logOut}
+//                             className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+//                         >
+//                             <TbLogout size={20} />
+//                             {isCollapsed ? null : <span>LOGOUT</span>}
+//                         </Button>
+//                     </div>
+//                 </Menu>
+//             </Sidebar>
+
+
+//         </div>
+//     )
+// }
+
+// export default SideBar;
+
+
+
+function SideBar({ isCollapsed, setIsCollapsed }) {
     const [selected, setSelected] = useState("Dashboard");
     const user = useSelector((state) => state.user.user);
     const dispatch = useDispatch();
@@ -55,20 +232,29 @@ function SideBar() {
 
     const logOut = () => {
         dispatch(logout());
-        navigate('/login');
-    }
+        navigate('/');
+    };
+
+    const sidebarWidth = isCollapsed ? 80 : 240;  // Adjust width based on collapse state
+
     return (
-        <div style={{}} className="text-white">
+        <div
+            style={{
+                position: "fixed", 
+                height: "100vh", 
+                width: `${sidebarWidth}px`,  // Set sidebar width dynamically
+                transition: "width 0.3s ease",  // Smooth transition when collapsing/expanding
+            }}
+            className="text-white"
+        >
             <Sidebar
                 backgroundColor="#1f2a40"
                 collapsed={isCollapsed}
                 style={{
                     height: "100%",
                 }}
-
             >
                 <Menu
-
                     menuItemStyles={{
                         button: {
                             '&:hover': {
@@ -76,61 +262,28 @@ function SideBar() {
                             },
                         },
                     }}
-
-                    rootStyles={{
-                        [`.${menuClasses.icon}`]: {
-                            //   backgroundColor: '#e1e1e1',
-                            // color: '#344cff',
-                            // '&:hover': {
-                            //     color: 'red',
-                            // },
-                        },
-                    }}
                 >
                     <MenuItem
                         onClick={() => { setIsCollapsed(!isCollapsed) }}
                         icon={isCollapsed ? <FiMenu /> : undefined}
-
                     >
-                        {
-                            !isCollapsed && (
-                                <div className="flex justify-between ml-[15px] items-center text-white  ">
-                                    {/* <p>{user.userType}</p> */}
-                                    <p>Admin</p>
-                                    <FiMenu
-                                        onClick={() => {
-                                            setIsCollapsed(!isCollapsed)
-                                        }}
-                                    />
-                                </div>
-                            )
-                        }
+                        {!isCollapsed && (
+                            <div className="flex justify-between ml-[15px] items-center text-white  ">
+                                <p>Admin</p>
+                                <FiMenu onClick={() => setIsCollapsed(!isCollapsed)} />
+                            </div>
+                        )}
                     </MenuItem>
-                    {
-                        !isCollapsed && (
-                            <div className="mb-5 flex justify-center items-center">
-                                <img
-                                    className="w-24 h-24 cursor-pointer rounded-full"
-                                    alt="profile-user"
-                                    src={user.photo}
-                                // src='/images/moha.svg'
-
-                                />
-                            </div>
-                        )
-                    }
-                    {
-                        !isCollapsed && (
-                            <div className="mb-5 flex justify-center items-center">
-
-                            </div>
-                        )
-                    }
-                    {/* </div> */}
-                    <div
-                        style={{
-                        }}
-                    >
+                    {!isCollapsed && (
+                        <div className="mb-5 flex justify-center items-center">
+                            <img
+                                className="w-24 h-24 cursor-pointer rounded-full"
+                                alt="profile-user"
+                                src={user.photo}
+                            />
+                        </div>
+                    )}
+                    <div>
                         <Item
                             title="Home"
                             to="/home"
@@ -152,7 +305,6 @@ function SideBar() {
                             selected={selected}
                             setSelected={setSelected}
                         />
-
                         <Item
                             title="Members"
                             to="/set"
@@ -195,8 +347,6 @@ function SideBar() {
                             selected={selected}
                             setSelected={setSelected}
                         />
-                        {/* <div className="text-center">LOGOUT</div>
-                        <button>log</button> */}
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 mb-4 flex justify-center">
                         <Button
@@ -209,10 +359,8 @@ function SideBar() {
                     </div>
                 </Menu>
             </Sidebar>
-
-
         </div>
-    )
+    );
 }
 
 export default SideBar;

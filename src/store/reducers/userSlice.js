@@ -52,26 +52,26 @@ export const registerUser = createAsyncThunk(
 
     }
 )
-export const submitFormData = createAsyncThunk(
+export const submitOnboardingData = createAsyncThunk(
     "user",
     async (formData, thunkAPI) => {
         try {
             const state = thunkAPI.getState();
             const userId = state.user.user._id
-            const formDataToSend = new FormData();
-            Object.keys(formData).forEach(key => {
-                if (Array.isArray(formData[key])) {
-                    formData[key].forEach((value, index) => {
-                        formDataToSend.append(`${key}[${index}]`, value);
-                    });
-                } else {
-                    formDataToSend.append(key, formData[key]);
-                }
-            });
-            console.log("formDataToSend", formDataToSend);
+            // const formDataToSend = new FormData();
+            // Object.keys(formData).forEach(key => {
+            //     if (Array.isArray(formData[key])) {
+            //         formData[key].forEach((value, index) => {
+            //             formDataToSend.append(`${key}[${index}]`, value);
+            //         });
+            //     } else {
+            //         formDataToSend.append(key, formData[key]);
+            //     }
+            // });
+            console.log("data>>>", formData);
             const response = await axios.put(
                 `${configs.baseUrl}/user/onboard/${userId}`,
-                formDataToSend);
+                formData);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -88,7 +88,7 @@ const initialState = {
     otherInfo: {},
     error: null,
     message: null,
-    registrationStatus:null
+    registrationStatus: null
 }
 const userSlice = createSlice({
     name: "user",
@@ -127,6 +127,7 @@ const userSlice = createSlice({
             state.personalInfo = {}
             state.careerInfo = {}
             state.otherInfo = {}
+            state.currentStep = 0
             console.log("cleared!!!!!!!");
         }
     },
@@ -146,6 +147,7 @@ const userSlice = createSlice({
                 state.token = data.jwToken
                 state.user = data
                 state.registrationStatus = data.registrationStatus
+                state.formStatus = data.registrationStatus
 
             })
             .addCase(loginUser.rejected, (state, action) => {
@@ -154,18 +156,20 @@ const userSlice = createSlice({
                 const { payload } = action;
                 state.error = payload.message;
             })
-            .addCase(submitFormData.pending, (state, action) => {
+            .addCase(submitOnboardingData.pending, (state, action) => {
                 console.log("Pending action:", action);
                 state.formStatus = "loading"
             })
-            .addCase(submitFormData.fulfilled, (state, action) => {
+            .addCase(submitOnboardingData.fulfilled, (state, action) => {
                 console.log("fulfilled action:", action);
-                state.formStatus = "succeeded"
+                // state.formStatus = "succeeded"
                 const { payload } = action;
-                state.message = payload.message;
+                state.message = payload.payLoad.customMessage;
+                console.log("here>>>>>",payload.payLoad.data);
+                state.formStatus= "complete"
                 // Clear form state or redirect user
             })
-            .addCase(submitFormData.rejected, (state, action) => {
+            .addCase(submitOnboardingData.rejected, (state, action) => {
                 state.formStatus = 'failed';
                 console.log("rejected action:", action);
                 // state.error = 'Please try again';
@@ -186,6 +190,7 @@ const userSlice = createSlice({
 
 export const user = (state) => state.user;
 export const loginStatus = (state) => state.loginStatus;
+export const registrationStatus = (state) => state.registrationStatus;
 export const message = (state) => state.message;
 export const error = (state) => state.error;
 export const { nextStep, previousStep, savecareerInfo, saveotherInfo, savepersonalInfo, logout, clearError, clearMessage } = userSlice.actions;

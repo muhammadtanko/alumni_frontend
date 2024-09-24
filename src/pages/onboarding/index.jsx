@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { previousStep, savecareerInfo, saveotherInfo, savepersonalInfo, submitFormData, logout, clearMessage } from "../../store/reducers/userSlice"
+import { previousStep, savecareerInfo, saveotherInfo, savepersonalInfo, logout, clearMessage, submitOnboardingData } from "../../store/reducers/userSlice"
 import { useState, useEffect } from 'react';
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -21,10 +21,11 @@ export default function Onboarding() {
     const handleFinalSubmit = () => {
         const completeData = { ...personalInfo, ...careerInfo, ...otherInfo };
         console.log("completeData>>>", completeData);
-        dispatch(submitFormData(completeData));
+        dispatch(submitOnboardingData(completeData));
     };
     const logo = () => {
         dispatch(logout());
+        navigate("/")
     };
     const displayMessage = typeof message === 'string' ? message : message?.message;
     const displayError = typeof error === 'string' ? error : error?.message;
@@ -34,11 +35,11 @@ export default function Onboarding() {
         }
     }, [currentStep]);
     useEffect(() => {
-        // state.formStatus = "succeeded"
-        if (formStatus === "succeeded") {
+        console.log("formStatus", formStatus);
+        if (formStatus === "complete") {
             const timer = setTimeout(() => {
                 dispatch(clearMessage());
-                navigate('/set');
+                navigate('/home');
             }, 3000);
             return () => clearTimeout(timer);
         } else {
@@ -69,8 +70,8 @@ export default function Onboarding() {
                                 Others
                             </li>
                         </ol>
-                        {/* <div className="my-4">
-                            <p className="text-base text-gray-500">
+                        <div className="my-4">
+                            <p className="text-base text-red-500">
                                 <span
                                     className="underline cursor-pointer"
                                     onClick={logo}
@@ -78,13 +79,12 @@ export default function Onboarding() {
                                     logout
                                 </span>
                             </p>
-                        </div> */}
+                        </div>
                         <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
                             <div className="text-gray-600">
                                 <p className="font-medium text-lg">{currentStepper === 1 ? "Personal Details" : currentStepper === 2 ? "Career Details" : "Other Details"}</p>
                                 <p>Please fill out all the fields.</p>
                             </div>
-                            <span className="text-green-900 font-extrabold text-4xl">{currentStep}</span>
 
                             <div className="lg:col-span-2">
                                 {currentStepper === 1 && <PersonalInfo next={next} />}

@@ -57,7 +57,7 @@ const Register = () => {
                 resetForm();
                 setLoading(false)
                 setTimeout(() => {
-                    navigate("/login")
+                    navigate("/")
                 }, 1500);
             } else {
                 setIsError(true);

@@ -246,7 +246,7 @@ function renderEventContent(eventInfo) {
 
 function Sidebar({ currentEvents }) {
   return (
-    <div className='w-1/3 h-[95vh] leading-6 bg-[#eaf9ff] border-r border-r-[#d3e2e8]'>
+    <div className='w-1/3 h-[95vh] hidden md:block leading-6 bg-[#eaf9ff] border-r border-r-[#d3e2e8]'>
       <div className='p-2'>
         <h2 className="text-center text-blue-700">Instructions</h2>
         <ul>

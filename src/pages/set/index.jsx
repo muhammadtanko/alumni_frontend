@@ -3,6 +3,7 @@ import Layout from "../../layouts/layout";
 import React, { useState, useEffect } from 'react';
 import { Modal } from 'flowbite-react';
 import { configs } from "../../config";
+import axios from "axios";
 export default function Set() {
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -40,13 +41,38 @@ export default function Set() {
     setShowModal(true);
   };
 
-  const handleActivate = (userId) => {
-    // Handle activation logic
+  const handleActivate = async (userId) => {
     console.log(`Activating user with ID: ${userId}`);
+    try {
+      // Making the PUT request to activate the user
+      const response = await axios.put(`${configs.baseUrl}/user/approve/${userId}`);
+
+      // Extracting data from the response (Axios automatically parses JSON)
+      const { ok, payLoad } = response.data;
+      console.log("response", payLoad);
+      if (ok) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Error activating user:", error.message);
+    }
   };
 
-  const handleDeactivate = (userId) => {
+  const handleDeactivate = async (userId) => {
     console.log(`Deactivating user with ID: ${userId}`);
+    try {
+      // Making the PUT request to activate the user
+      const response = await axios.put(`${configs.baseUrl}/user/disable/${userId}`);
+
+      // Extracting data from the response (Axios automatically parses JSON)
+      const { ok, payLoad } = response.data;
+      console.log("response", payLoad);
+      if (ok) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Error activating user:", error.message);
+    }
   }
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -71,7 +97,7 @@ export default function Set() {
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avatar</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                  {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Set</th> */}
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Set</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chapter</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
@@ -89,7 +115,7 @@ export default function Set() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">{`${user.firstName} ${user.lastName}`
                     }</td>
-                    {/* <td className="px-6 py-4 whitespace-nowrap">{user.set.yearOfGraduation}</td> */}
+                    <td className="px-6 py-4 whitespace-nowrap">{user.set.yearOfGraduation}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{user.chapter.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{user.phoneNumber}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
@@ -110,7 +136,7 @@ export default function Set() {
                         onClick={(e) => { e.stopPropagation(); handleDeactivate(user._id); }}
                         className="bg-yellow-800 text-white px-3 py-1 rounded hover:bg-yellow-200"
                       >
-                        Deactivate
+                        Disable
                       </button>}
                     </td>
                   </tr>
@@ -142,9 +168,9 @@ export default function Set() {
             <Modal.Header />
             <Modal.Body>
               <div className="text-center">
-                <img src={selectedUser.photo} alt={selectedUser.name} className="w-32 h-32 rounded-full mx-auto" />
+                <img src={selectedUser.photo} alt={selectedUser.name} className="w-45 h-45 rounded-full mx-auto" />
                 <h3 className="mt-4 text-xl font-medium text-gray-900">{`${selectedUser.firstName} ${selectedUser.lastName}`}</h3>
-                <p className="text-sm text-gray-500">{selectedUser.class.yearOfGraduation} - {selectedUser.chapter.name}</p>
+                <p className="text-sm text-gray-500">{selectedUser.set.yearOfGraduation} - {selectedUser.chapter.name}</p>
               </div>
             </Modal.Body>
 
