@@ -15,8 +15,7 @@ const validationSchema = Yup.object().shape({
     .oneOf(["virtual", "onSite"], "Invalid category")
     .required("Category is required"),
   url: Yup.string()
-    .url("Invalid URL format")
-    .required("URL is required"),
+    .url("Invalid URL format"),
   description: Yup.string().required("Description is required"),
 });
 
