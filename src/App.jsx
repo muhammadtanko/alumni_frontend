@@ -3,6 +3,7 @@ import Dashboard from "./pages/dashboard"
 import Onboarding from "./pages/onboarding"
 import Home from "./pages/home"
 import Login from "./pages/login"
+import Members from "./pages/members"
 import Set from "./pages/set"
 import Payment from "./pages/payments"
 import Email from "./pages/email"
@@ -24,6 +25,7 @@ function App() {
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/members" element={<Members />} />
           <Route path="/set" element={<Set />} />
           <Route path="/payments" element={<Payment />} />
           <Route path="/email" element={<Email />} />

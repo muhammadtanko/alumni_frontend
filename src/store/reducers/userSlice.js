@@ -53,7 +53,7 @@ export const registerUser = createAsyncThunk(
     }
 )
 export const submitOnboardingData = createAsyncThunk(
-    "user",
+    "user/onboarding",
     async (formData, thunkAPI) => {
         try {
             const state = thunkAPI.getState();

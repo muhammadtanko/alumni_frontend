@@ -4,13 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from 'flowbite-react';
 import { configs } from "../../config";
 import axios from "axios";
-import { useSelector } from "react-redux";
-
-
-export default function Set() {
-  const user = useSelector((state) => state.user.user);
-
-
+export default function Members() {
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,11 +14,10 @@ export default function Set() {
   const itemsPerPage = 20;
 
   useEffect(() => {
-    console.log("current user", user.set);
     const fetchUsers = async () => {
       try {
         console.log("fetching!!");
-        const response = await fetch(`${configs.baseUrl}/user/set/${user.set}`);
+        const response = await fetch(`${configs.baseUrl}/user`);
         const { payLoad } = await response.json();
         console.log("response", response);
         console.log("data", payLoad);

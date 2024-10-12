@@ -307,6 +307,13 @@ function SideBar({ isCollapsed, setIsCollapsed }) {
                         />
                         <Item
                             title="Members"
+                            to="/members"
+                            icon={<GiThreeFriends />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                          <Item
+                            title="My Set"
                             to="/set"
                             icon={<GiThreeFriends />}
                             selected={selected}

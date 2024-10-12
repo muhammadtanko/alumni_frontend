@@ -6,7 +6,7 @@ import { useState } from "react";
 
 
 const Layout = ({ children }) => {
-    const [isCollapsed, setIsCollapsed] = useState(true);  // Add state to manage collapsed state
+    const [isCollapsed, setIsCollapsed] = useState(false);  // Add state to manage collapsed state
     const sidebarWidth = isCollapsed ? 80 : 240;  // Define sidebar width based on collapse state
 
     return (
