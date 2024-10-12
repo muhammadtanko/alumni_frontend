@@ -96,12 +96,12 @@ const Chapter = () => {
             </Drawer.Items>
           </Drawer>
         )}
-        {/* <button
+        <button
           className="fixed bottom-12 right-12 bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 hover:scale-110 transition-transform duration-300"
           onClick={() => setShowModal(true)}
         >
           <IoMdAdd size={24} />
-        </button> */}
+        </button>
         {showModal && (
           <Modal
             show={showModal}
